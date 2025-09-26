@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Weekly AI Newsletter</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f7fa; margin: 0; padding: 0; color: #333; }
+    .container { max-width: 750px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; }
+    .header { background: #f68b1e; text-align: center; padding: 20px; }
+    .header img { max-width: 250px; }
+    .edition { text-align: center; background: #eee; padding: 10px; font-size: 14px; color: #555; }
+
+    /* Featured */
+    .featured { padding: 20px; border-bottom: 2px solid #ddd; }
+    .featured img {
+      max-width: 100%;
+      max-height: 300px;
+      width: auto;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      object-fit: cover;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .featured h2 { margin: 0 0 10px; color: #f68b1e; text-align: center; }
+    .featured a { text-decoration: none; color: #f68b1e; }
+    .featured p { font-size: 15px; line-height: 1.6; margin: 0 0 10px; text-align: justify; }
+
+    /* Stories */
+    .article { display: flex; padding: 20px; border-bottom: 1px solid #ddd; }
+    .article img {
+      width: 160px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 15px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .article h3 { margin: 0 0 8px; font-size: 17px; }
+    .article a { text-decoration: none; color: #f68b1e; }
+    .article p { font-size: 14px; line-height: 1.5; margin: 0; }
+
+    /* Events */
+    .events-section { padding: 20px; }
+    .events-section h2 { margin-bottom: 10px; color: #f68b1e; }
+    .events-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .events-table th, .events-table td { border: 1px solid #ddd; padding: 8px; }
+    .events-table th { background: #f4f4f4; text-align: left; }
+    .events-table a { color: #f68b1e; text-decoration: none; }
+
+    /* Footer */
+    .footer { text-align: center; font-size: 13px; color: #777; padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; }
+    .social-icons img { width: 24px; margin: 0 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header Banner -->
+    <div class="header">
+      <img src="https://via.placeholder.com/250x70.png?text=Dept+of+CSE+(AI+ML)" alt="Dept Banner">
+    </div>
+
+    <!-- Edition -->
+    <div class="edition">
+      📰 Weekly AI & ML Newsletter | {{ date }}
+    </div>
+
+    <!-- Featured Story -->
+    {% if featured %}
+    <div class="featured">
+      <img src="{{ featured.image }}" alt="Featured">
+      <h2><a href="{{ featured.url }}" target="_blank">{{ featured.title }}</a></h2>
+      <p>{{ featured.summary }}</p>
+      <div style="text-align:center;">
+        <a href="{{ featured.url }}" target="_blank">Read full story →</a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Regular Stories -->
+    {% for story in stories %}
+    <div class="article">
+      <img src="{{ story.image }}" alt="Article">
+      <div>
+        <h3><a href="{{ story.url }}" target="_blank">{{ story.title }}</a></h3>
+        <p>{{ story.summary }}</p>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Events Section -->
+    {% if events %}
+    <div class="events-section">
+      <h2>📅 Upcoming Events & Workshops</h2>
+      <table class="events-table">
+        <tr><th>Event</th><th>Details</th><th>Link</th></tr>
+        {% for e in events %}
+        <tr>
+          <td>{{ e.title }}</td>
+          <td>{{ e.summary }}</td>
+          <td><a href="{{ e.url }}" target="_blank">Register</a></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Sent automatically by the Department of CSE (AI & ML)</p>
+      <div class="social-icons">
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Facebook"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384065.png" alt="Twitter"></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="LinkedIn"></a>
+      </div>
+      <p>© {{ year }} Dept. of CSE (AI & ML)</p>
+    </div>
+  </div>
+</body>
+</html>

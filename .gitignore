@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Output and logs
+newsletter/output/
+*.log
+*.sqlite3
+*.db
+
+# API keys and secrets
+.env
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
