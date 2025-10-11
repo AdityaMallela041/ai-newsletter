@@ -1,123 +1,715 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Weekly AI Newsletter</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f4f7fa; margin: 0; padding: 0; color: #333; }
-    .container { max-width: 750px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; }
-    .header { background: #f68b1e; text-align: center; padding: 20px; }
-    .header img { max-width: 250px; }
-    .edition { text-align: center; background: #eee; padding: 10px; font-size: 14px; color: #555; }
-
-    /* Featured */
-    .featured { padding: 20px; border-bottom: 2px solid #ddd; }
-    .featured img {
-      max-width: 100%;
-      max-height: 300px;
-      width: auto;
-      height: auto;
-      border-radius: 6px;
-      margin-bottom: 15px;
-      object-fit: cover;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .featured h2 { margin: 0 0 10px; color: #f68b1e; text-align: center; }
-    .featured a { text-decoration: none; color: #f68b1e; }
-    .featured p { font-size: 15px; line-height: 1.6; margin: 0 0 10px; text-align: justify; }
-
-    /* Stories */
-    .article { display: flex; padding: 20px; border-bottom: 1px solid #ddd; }
-    .article img {
-      width: 160px;
-      height: 100px;
-      object-fit: cover;
-      margin-right: 15px;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-    .article h3 { margin: 0 0 8px; font-size: 17px; }
-    .article a { text-decoration: none; color: #f68b1e; }
-    .article p { font-size: 14px; line-height: 1.5; margin: 0; }
-
-    /* Events */
-    .events-section { padding: 20px; }
-    .events-section h2 { margin-bottom: 10px; color: #f68b1e; }
-    .events-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    .events-table th, .events-table td { border: 1px solid #ddd; padding: 8px; }
-    .events-table th { background: #f4f4f4; text-align: left; }
-    .events-table a { color: #f68b1e; text-decoration: none; }
-
-    /* Footer */
-    .footer { text-align: center; font-size: 13px; color: #777; padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; }
-    .social-icons img { width: 24px; margin: 0 5px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ newsletter_title }}</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Container */
+        .email-wrapper {
+            width: 100%;
+            background-color: #f4f4f4;
+            padding: 20px 0;
+        }
+        
+        .email-container {
+            max-width: 680px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .header .tagline {
+            font-size: 14px;
+            opacity: 0.95;
+            margin-bottom: 16px;
+        }
+        
+        .header .date {
+            font-size: 13px;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+        
+        /* Greeting Section */
+        .greeting {
+            padding: 24px 24px 16px;
+            background-color: #ffffff;
+        }
+        
+        .greeting p {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 12px;
+        }
+        
+        .greeting .intro-text {
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.7;
+        }
+        
+        /* Section Header */
+        .section-header {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 12px 24px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            text-align: center;
+            margin: 0;
+        }
+        
+        /* Article Card with Image */
+        .article-section {
+            padding: 24px 24px;
+            background-color: #ffffff;
+        }
+        
+        .article-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            padding: 0;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .article-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .article-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Article Image - CRITICAL FOR DISPLAY */
+        .article-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .article-content {
+            padding: 20px;
+        }
+        
+        .article-source {
+            display: inline-block;
+            background-color: #667eea;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            letter-spacing: 0.8px;
+        }
+        
+        .article-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .article-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+        
+        .article-title a:hover {
+            color: #667eea;
+        }
+        
+        .article-summary {
+            font-size: 15px;
+            color: #555555;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eeeeee;
+        }
+        
+        .article-date {
+            font-size: 12px;
+            color: #999999;
+        }
+        
+        .read-more {
+            display: inline-block;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .read-more:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        /* Quick Hits Section */
+        .quick-hits {
+            padding: 20px 24px;
+            background-color: #fafafa;
+        }
+        
+        .quick-hit-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .quick-hit-item:last-child {
+            border-bottom: none;
+        }
+        
+        .quick-hit-bullet {
+            color: #667eea;
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+        
+        .quick-hit-content {
+            flex: 1;
+        }
+        
+        .quick-hit-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .quick-hit-content h4 a {
+            color: #333333;
+            text-decoration: none;
+        }
+        
+        .quick-hit-content h4 a:hover {
+            color: #667eea;
+        }
+        
+        .quick-hit-content p {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+        }
+        
+        /* Sponsored Section with Image */
+        .sponsored {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 24px;
+            margin: 24px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .sponsored-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #667eea;
+            margin-bottom: 16px;
+            letter-spacing: 1.2px;
+        }
+        
+        .sponsored-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .sponsored h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+        
+        .sponsored h3 a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+        
+        .sponsored p {
+            font-size: 15px;
+            color: #444444;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        
+        .sponsored-cta {
+            display: inline-block;
+            background-color: #667eea;
+            color: #ffffff;
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .sponsored-cta:hover {
+            background-color: #764ba2;
+        }
+        
+        /* Trending Tools */
+        .trending-tools {
+            padding: 20px 24px;
+            background-color: #ffffff;
+        }
+        
+        .tool-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        
+        .tool-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .tool-icon {
+            font-size: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .tool-content {
+            flex: 1;
+        }
+        
+        .tool-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .tool-content h4 a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .tool-content h4 a:hover {
+            text-decoration: underline;
+        }
+        
+        .tool-content p {
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+        }
+        
+        /* Highlights Section */
+        .highlights {
+            padding: 20px 24px;
+            background-color: #fafafa;
+        }
+        
+        .highlight-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eeeeee;
+        }
+        
+        .highlight-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .highlight-icon {
+            font-size: 18px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .highlight-content {
+            flex: 1;
+        }
+        
+        .highlight-content a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        
+        .highlight-content a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Feedback Section */
+        .feedback {
+            background-color: #f9f9f9;
+            padding: 32px 24px;
+            text-align: center;
+            border-top: 2px solid #eeeeee;
+        }
+        
+        .feedback h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+        
+        .feedback p {
+            font-size: 15px;
+            color: #666666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .rating-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .rating-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            background-color: #ffffff;
+            border: 2px solid #e5e5e5;
+            transition: all 0.2s ease;
+        }
+        
+        .rating-btn:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .feedback-cta {
+            display: inline-block;
+            background-color: #667eea;
+            color: #ffffff;
+            padding: 12px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 12px;
+        }
+        
+        .feedback-cta:hover {
+            background-color: #764ba2;
+        }
+        
+        .stats {
+            font-size: 13px;
+            color: #999999;
+            margin-top: 20px;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #1a1a1a;
+            color: #cccccc;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .footer-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .footer-links {
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-signature {
+            font-size: 12px;
+            color: #888888;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        /* Responsive Design */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                border-radius: 0;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .article-title {
+                font-size: 18px;
+            }
+            
+            .article-image {
+                max-height: 250px;
+            }
+            
+            .article-summary {
+                font-size: 14px;
+            }
+            
+            .rating-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .tool-item {
+                flex-direction: column;
+            }
+            
+            .tool-icon {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-
-    <!-- Header Banner -->
-    <div class="header">
-      <img src="https://via.placeholder.com/250x70.png?text=Dept+of+CSE+(AI+ML)" alt="Dept Banner">
+    <div class="email-wrapper">
+        <div class="email-container">
+            
+            <!-- Header -->
+            <div class="header">
+                <h1>🤖 {{ newsletter_title }}</h1>
+                <p class="tagline">Your Weekly AI & ML Update from CSE(AI&ML) Department</p>
+                <p class="date">{{ current_date }}</p>
+            </div>
+            
+            <!-- Greeting -->
+            <div class="greeting">
+                <p>Good {{ time_of_day }}, {{ recipient_name }}! 👋</p>
+                <p class="intro-text">
+                    This week in AI & ML: From breakthrough research to cutting-edge tools, 
+                    here's everything you need to know in 5 minutes or less.
+                </p>
+            </div>
+            
+            <!-- Latest Developments Section with Images -->
+            <div class="section-header">LATEST DEVELOPMENTS</div>
+            
+            <div class="article-section">
+                {% for article in featured_articles[:3] %}
+                <div class="article-card">
+                    <!-- CRITICAL: Article Image Display -->
+                    {% if article.image %}
+                    <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image" />
+                    {% endif %}
+                    
+                    <div class="article-content">
+                        <span class="article-source">{{ article.source }}</span>
+                        <h2 class="article-title">
+                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+                        </h2>
+                        <p class="article-summary">{{ article.summary }}</p>
+                        <div class="article-meta">
+                            <span class="article-date">{{ article.published_date }}</span>
+                            <a href="{{ article.link }}" class="read-more" target="_blank">Read full story →</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Sponsored Content with Image -->
+            {% if sponsored_content %}
+            <div class="sponsored">
+                <div class="sponsored-label">{{ sponsored_content.label }}</div>
+                
+                {% if sponsored_content.image %}
+                <img src="{{ sponsored_content.image }}" alt="{{ sponsored_content.title }}" class="sponsored-image" />
+                {% endif %}
+                
+                <h3><a href="{{ sponsored_content.link }}" target="_blank">{{ sponsored_content.title }}</a></h3>
+                <p>{{ sponsored_content.description }}</p>
+                
+                {% if sponsored_content.cta_text %}
+                <a href="{{ sponsored_content.link }}" class="sponsored-cta" target="_blank">
+                    {{ sponsored_content.cta_text }}
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- Quick Hits Section -->
+            {% if quick_hits %}
+            <div class="section-header">QUICK HITS</div>
+            
+            <div class="quick-hits">
+                {% for item in quick_hits %}
+                <div class="quick-hit-item">
+                    <span class="quick-hit-bullet">•</span>
+                    <div class="quick-hit-content">
+                        <h4><a href="{{ item.link }}" target="_blank">{{ item.title }}</a></h4>
+                        <p>{{ item.summary }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Trending AI Tools Section -->
+            {% if trending_tools %}
+            <div class="section-header">🔧 TRENDING AI TOOLS</div>
+            
+            <div class="trending-tools">
+                {% for tool in trending_tools %}
+                <div class="tool-item">
+                    <span class="tool-icon">{{ tool.icon }}</span>
+                    <div class="tool-content">
+                        <h4><a href="{{ tool.link }}" target="_blank">{{ tool.name }}</a></h4>
+                        <p>{{ tool.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Highlights: News, Guides & Events -->
+            {% if highlights %}
+            <div class="section-header">📚 HIGHLIGHTS: NEWS, GUIDES & EVENTS</div>
+            
+            <div class="highlights">
+                {% for highlight in highlights %}
+                <div class="highlight-item">
+                    <span class="highlight-icon">{{ highlight.icon }}</span>
+                    <div class="highlight-content">
+                        <a href="{{ highlight.link }}" target="_blank">{{ highlight.title }}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Feedback Section -->
+            <div class="feedback">
+                <h3>That's it for today!</h3>
+                <p>Before you go, we'd love to know what you thought of today's newsletter 
+                   to help us improve the experience for you.</p>
+                
+                <div class="rating-buttons">
+                    <a href="{{ feedback_url }}?rating=5" class="rating-btn" title="Nailed it">⭐⭐⭐⭐⭐</a>
+                    <a href="{{ feedback_url }}?rating=3" class="rating-btn" title="Average">⭐⭐⭐</a>
+                    <a href="{{ feedback_url }}?rating=1" class="rating-btn" title="Fail">⭐</a>
+                </div>
+                
+                <a href="{{ feedback_url }}" class="feedback-cta">Share Detailed Feedback</a>
+                
+                <p class="stats">
+                    Viewed {{ total_views }} times | Avg. Rating: {{ avg_rating }}/5.0
+                </p>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-brand">CSE(AI&ML) Newsletter</div>
+                <p>Delivered weekly every Friday at 4 PM IST</p>
+                <p>Department of Computer Science & Engineering (AI & ML)</p>
+                
+                <div class="footer-links">
+                    <a href="{{ unsubscribe_url }}">Unsubscribe</a>
+                    <a href="{{ preferences_url }}">Manage Preferences</a>
+                    <a href="{{ archive_url }}">View Archive</a>
+                </div>
+                
+                <p class="footer-signature">
+                    {{ team_signature }}<br>
+                    Powered by AI Newsletter Automation System
+                </p>
+            </div>
+            
+        </div>
     </div>
-
-    <!-- Edition -->
-    <div class="edition">
-      📰 Weekly AI & ML Newsletter | {{ date }}
-    </div>
-
-    <!-- Featured Story -->
-    {% if featured %}
-    <div class="featured">
-      <img src="{{ featured.image }}" alt="Featured">
-      <h2><a href="{{ featured.url }}" target="_blank">{{ featured.title }}</a></h2>
-      <p>{{ featured.summary }}</p>
-      <div style="text-align:center;">
-        <a href="{{ featured.url }}" target="_blank">Read full story →</a>
-      </div>
-    </div>
-    {% endif %}
-
-    <!-- Regular Stories -->
-    {% for story in stories %}
-    <div class="article">
-      <img src="{{ story.image }}" alt="Article">
-      <div>
-        <h3><a href="{{ story.url }}" target="_blank">{{ story.title }}</a></h3>
-        <p>{{ story.summary }}</p>
-      </div>
-    </div>
-    {% endfor %}
-
-    <!-- Events Section -->
-    {% if events %}
-    <div class="events-section">
-      <h2>📅 Upcoming Events & Workshops</h2>
-      <table class="events-table">
-        <tr><th>Event</th><th>Details</th><th>Link</th></tr>
-        {% for e in events %}
-        <tr>
-          <td>{{ e.title }}</td>
-          <td>{{ e.summary }}</td>
-          <td><a href="{{ e.url }}" target="_blank">Register</a></td>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-    {% endif %}
-
-    <!-- Footer -->
-    <div class="footer">
-      <p>Sent automatically by the Department of CSE (AI & ML)</p>
-      <div class="social-icons">
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Facebook"></a>
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384065.png" alt="Twitter"></a>
-        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="LinkedIn"></a>
-      </div>
-      <p>© {{ year }} Dept. of CSE (AI & ML)</p>
-    </div>
-  </div>
 </body>
 </html>

@@ -1,8 +1,41 @@
-fastapi
-uvicorn
-requests
-jinja2
-python-dotenv
-sendgrid
-apscheduler
-sqlalchemy
+# Core Web Framework
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+
+# HTTP Requests
+requests>=2.32.0
+
+# Template Engine
+jinja2>=3.1.4
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# Email Service
+sendgrid>=6.11.0
+
+# Task Scheduling
+apscheduler>=3.10.0
+
+# Database ORM
+sqlalchemy>=2.0.35
+
+# AI/Search APIs - NEW ADDITIONS
+tavily-python>=0.5.0
+groq>=0.11.0
+
+# HTML/Email Image Handling - OPTIONAL BUT RECOMMENDED
+pillow>=10.4.0
+beautifulsoup4>=4.12.0
+
+# Date/Time Utilities
+python-dateutil>=2.9.0
+
+# Async Support (for FastAPI)
+httpx>=0.27.0
+
+# Data Validation
+pydantic>=2.9.0
+
+# Logging Enhancement - OPTIONAL
+colorlog>=6.8.0
