@@ -131,12 +131,19 @@ def run_pipeline():
         f.write(newsletter_html)
     print(f"   ✅ Saved to: {output_path}")
     
-    # Step 7: Send email
-    print("\n📧 Sending newsletter...")
+    # Step 7: Send email (controlled by environment variable)
+    print("\n📧 Email Sending...")
     recipient_email = os.getenv("RECIPIENT_EMAIL")
     subject = f"🤖 CSE(AI&ML) Weekly Newsletter - {datetime.now().strftime('%B %d, %Y')}"
-    
-    send_email(newsletter_html, subject)
+
+    # Check if email sending is enabled
+    if os.getenv("SEND_EMAIL", "false").lower() == "true":
+        send_email(newsletter_html, subject)
+    else:
+        print("   ⚠️ Email sending DISABLED (testing mode)")
+        print(f"   📬 Would send to: {recipient_email}")
+        print(f"   📝 Subject: {subject}")
+
     
     # Log newsletter delivery
     total_articles = len(developments) + len(training) + len(research) + len(tools) + len(startups)
