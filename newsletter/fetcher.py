@@ -1,7 +1,7 @@
 # newsletter/fetcher.py
 import os
 import requests
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -11,20 +11,24 @@ TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 def fetch_articles():
     """
-    Fetch latest AI/ML news with enhanced image extraction from multiple sources
+    Fetch categorized AI/ML content:
+    - Latest Developments
+    - AI Training
+    - AI Research  
+    - AI Tools
+    - AI Startups
     """
     url = "https://api.tavily.com/search"
     headers = {"Content-Type": "application/json"}
 
     def search(query, max_results=5):
-        """Enhanced search with better image handling"""
+        """Enhanced search with image support"""
         payload = {
             "api_key": TAVILY_API_KEY,
             "query": query,
             "search_depth": "advanced",
             "max_results": max_results,
-            "include_images": True,  # Request images from Tavily
-            "include_answer": False,
+            "include_images": True,
             "include_raw_content": False,
         }
         try:
@@ -36,12 +40,12 @@ def fetch_articles():
             print(f"❌ Error fetching from Tavily: {e}")
             return [], []
 
-    # Fetch with images
-    featured_results, featured_images = search("major AI breakthrough 2025", max_results=1)
-    story_results, story_images = search("latest AI machine learning news", max_results=8)
-    quick_hit_results, quick_images = search("AI news updates", max_results=6)
-    tool_results, tool_images = search("new AI tools platforms 2025", max_results=5)
-    event_results, event_images = search("upcoming AI conferences workshops 2025", max_results=4)
+    # Fetch categorized content
+    developments_results, dev_images = search("latest AI machine learning breakthroughs news 2025", max_results=4)
+    training_results, train_images = search("AI training techniques machine learning courses workshops 2025", max_results=3)
+    research_results, research_images = search("AI research papers machine learning arxiv publications 2025", max_results=3)
+    tools_results, tools_images = search("new AI tools platforms software releases 2025", max_results=4)
+    startups_results, startups_images = search("new AI startups machine learning companies founded 2025", max_results=3)
 
     def extract_source_name(url_val):
         """Extract clean source name from URL"""
@@ -54,15 +58,23 @@ def fetch_articles():
         except:
             return "AI NEWS"
 
-    def get_image_for_article(res, image_pool, index=0):
-        """
-        Get image for article from multiple sources:
-        1. Article's own image field
-        2. Image pool from Tavily
-        3. OpenGraph image via URL scraping
-        4. High-quality placeholder
-        """
-        # Try article's own image first
+    def extract_video_id(url_val):
+        """Extract YouTube video ID if present"""
+        if not url_val or "youtube.com" not in url_val and "youtu.be" not in url_val:
+            return None
+        try:
+            if "youtu.be" in url_val:
+                return url_val.split("/")[-1].split("?")[0]
+            parsed = urlparse(url_val)
+            if "youtube.com" in parsed.netloc:
+                return parse_qs(parsed.query).get("v", [None])[0]
+        except:
+            return None
+        return None
+
+    def get_high_quality_image(res, image_pool, index=0):
+        """Get best quality image with proper aspect ratio"""
+        # Try article's own image
         if res.get("image"):
             return res["image"]
         
@@ -70,40 +82,32 @@ def fetch_articles():
         if image_pool and len(image_pool) > index:
             return image_pool[index]
         
-        # Try getting image from the article URL using a simple trick
-        article_url = res.get("url", "")
-        if article_url:
-            # Use a free OpenGraph API service
-            try:
-                og_api = f"https://opengraph.io/api/1.1/site/{requests.utils.quote(article_url)}?app_id=free"
-                og_resp = requests.get(og_api, timeout=5)
-                if og_resp.status_code == 200:
-                    og_data = og_resp.json()
-                    og_image = og_data.get("hybridGraph", {}).get("image")
-                    if og_image:
-                        return og_image
-            except:
-                pass
+        # Try to get YouTube thumbnail
+        video_id = extract_video_id(res.get("url", ""))
+        if video_id:
+            return f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg"
         
-        # Fallback: Use Unsplash for real AI/tech images instead of placeholder
-        title_keywords = res.get("title", "artificial intelligence")
+        # Fallback to Unsplash with proper dimensions
         keywords = "artificial+intelligence+technology"
-        return f"https://source.unsplash.com/1200x630/?{keywords}"
+        return f"https://source.unsplash.com/800x450/?{keywords}"
 
-    def format_article(res, article_type="story", image_pool=[], index=0):
-        """Format article with comprehensive metadata and real images"""
+    def format_article(res, article_type, image_pool=[], index=0):
+        """Format article with comprehensive metadata"""
         if not res:
             return None
             
         url_val = res.get("url", "#")
         content_val = res.get("content") or res.get("snippet") or res.get("title") or ""
         
-        # Skip articles with insufficient content
-        if article_type == "event" and len(content_val.split()) < 10:
+        # Skip insufficient content
+        if len(content_val.split()) < 10:
             return None
         
-        # Get best available image
-        image = get_image_for_article(res, image_pool, index)
+        # Get high-quality image with proper sizing
+        image = get_high_quality_image(res, image_pool, index)
+        
+        # Check if it's a YouTube video
+        video_id = extract_video_id(url_val)
         
         # Extract published date
         published_date = res.get("published_date")
@@ -123,66 +127,45 @@ def fetch_articles():
             "link": url_val,
             "content": content_val,
             "image": image,
+            "video_id": video_id,  # For YouTube embeds
             "source": extract_source_name(url_val),
             "published_date": published_date,
             "score": res.get("score", 0.0),
+            "category": article_type
         }
 
-    # Format all content with images
-    featured = None
-    if featured_results:
-        featured = format_article(featured_results[0], "featured", featured_images, 0)
+    # Format all categories
+    developments = [format_article(r, "development", dev_images, i) 
+                    for i, r in enumerate(developments_results) 
+                    if format_article(r, "development", dev_images, i)][:4]
     
-    stories = []
-    for i, r in enumerate(story_results[:6]):
-        article = format_article(r, "story", story_images, i)
-        if article:
-            stories.append(article)
+    training = [format_article(r, "training", train_images, i) 
+                for i, r in enumerate(training_results) 
+                if format_article(r, "training", train_images, i)][:3]
     
-    quick_hits = []
-    for i, r in enumerate(quick_hit_results[:5]):
-        article = format_article(r, "quick_hit", quick_images, i)
-        if article:
-            quick_hits.append({
-                "title": article.get("title", ""),
-                "link": article.get("link", "#"),
-                "summary": article.get("content", "")[:150] + "..."
-            })
+    research = [format_article(r, "research", research_images, i) 
+                for i, r in enumerate(research_results) 
+                if format_article(r, "research", research_images, i)][:3]
     
-    trending_tools = []
-    for i, r in enumerate(tool_results[:4]):
-        article = format_article(r, "tool", tool_images, i)
-        if article:
-            trending_tools.append({
-                "icon": "🔧",
-                "name": article["title"][:60],
-                "description": article["content"][:120] + "...",
-                "link": article["link"]
-            })
+    tools = [format_article(r, "tool", tools_images, i) 
+             for i, r in enumerate(tools_results) 
+             if format_article(r, "tool", tools_images, i)][:4]
     
-    events = []
-    for i, r in enumerate(event_results):
-        article = format_article(r, "event", event_images, i)
-        if article:
-            events.append(article)
+    startups = [format_article(r, "startup", startups_images, i) 
+                for i, r in enumerate(startups_results) 
+                if format_article(r, "startup", startups_images, i)][:3]
 
     print(f"\n📊 Fetch Summary:")
-    print(f"   Featured: {1 if featured else 0}")
-    print(f"   Stories: {len(stories)}")
-    print(f"   Quick Hits: {len(quick_hits)}")
-    print(f"   Trending Tools: {len(trending_tools)}")
-    print(f"   Events: {len(events)}")
-    
-    # Debug: Show image sources
-    print(f"\n🖼️ Image Summary:")
-    print(f"   Featured image: {featured['image'][:60] if featured else 'None'}...")
-    if stories:
-        print(f"   Story 1 image: {stories[0]['image'][:60]}...")
+    print(f"   Latest Developments: {len(developments)}")
+    print(f"   AI Training: {len(training)}")
+    print(f"   AI Research: {len(research)}")
+    print(f"   AI Tools: {len(tools)}")
+    print(f"   AI Startups: {len(startups)}")
 
     return {
-        "featured": featured,
-        "stories": stories,
-        "quick_hits": quick_hits,
-        "trending_tools": trending_tools,
-        "events": events,
+        "developments": developments,
+        "training": training,
+        "research": research,
+        "tools": tools,
+        "startups": startups,
     }

@@ -7,56 +7,49 @@ load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-def summarize_with_groq(text: str, section: str = "story") -> str | None:
+def summarize_with_groq(text: str, category: str = "development") -> str | None:
     """
-    Summarize text using Groq's LLaMA model with enhanced prompts.
-    Returns None for invalid/empty content.
+    Category-specific AI summarization:
+    - development: Latest AI/ML breakthroughs
+    - training: AI training techniques and courses
+    - research: Academic research and papers
+    - tool: AI tools and platforms
+    - startup: New AI companies and startups
     """
     if not GROQ_API_KEY:
         return f"{text[:150]}..."
 
-    # Enhanced prompts for different sections
-    if section == "featured":
-        prompt = (
-            "You are a tech newsletter writer. Summarize this AI/ML article in 4-5 engaging sentences "
-            "that highlight the key breakthrough, its significance, and potential impact. "
-            "Write in an informative yet accessible tone. Return ONLY the summary:\n\n"
-            f"{text}"
-        )
-        max_tokens = 250
-        
-    elif section == "events":
-        prompt = (
-            "Extract event details from this text. Include: event name, date/time, topic, and how to register. "
-            "If no clear event information exists, respond with exactly: NO_EVENT. "
-            "Return ONLY the event summary in 2-3 sentences:\n\n"
-            f"{text}"
-        )
-        max_tokens = 150
-        
-    elif section == "quick_hit":
-        prompt = (
-            "Summarize this AI news in 1-2 punchy sentences. Be concise and highlight what's newsworthy. "
+    # Category-specific prompts
+    prompts = {
+        "development": (
+            "Summarize this AI/ML breakthrough in 3-4 sentences. "
+            "Focus on: what happened, why it matters, and potential impact. "
+            "Be clear and engaging. Return ONLY the summary:\n\n"
+        ),
+        "training": (
+            "Summarize this AI training resource in 2-3 sentences. "
+            "Focus on: what's covered, who it's for, and key learnings. "
             "Return ONLY the summary:\n\n"
-            f"{text}"
+        ),
+        "research": (
+            "Summarize this AI research in 3-4 sentences. "
+            "Focus on: research question, methodology, and key findings. "
+            "Return ONLY the summary:\n\n"
+        ),
+        "tool": (
+            "Summarize this AI tool in 2-3 sentences. "
+            "Focus on: what it does, key features, and use cases. "
+            "Return ONLY the summary:\n\n"
+        ),
+        "startup": (
+            "Summarize this AI startup in 2-3 sentences. "
+            "Focus on: what they build, their unique approach, and target market. "
+            "Return ONLY the summary:\n\n"
         )
-        max_tokens = 100
-        
-    elif section == "tool":
-        prompt = (
-            "Describe this AI tool/platform in 2-3 sentences. Focus on: what it does, key features, "
-            "and who it's for. Return ONLY the description:\n\n"
-            f"{text}"
-        )
-        max_tokens = 150
-        
-    else:  # default story
-        prompt = (
-            "You are a tech newsletter writer. Summarize this AI/ML article in 3-4 clear sentences. "
-            "Focus on the key points and why it matters. Return ONLY the summary:\n\n"
-            f"{text}"
-        )
-        max_tokens = 200
+    }
+    
+    prompt = prompts.get(category, prompts["development"]) + text
+    max_tokens = 200
 
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
@@ -69,7 +62,7 @@ def summarize_with_groq(text: str, section: str = "story") -> str | None:
         "messages": [
             {
                 "role": "system", 
-                "content": "You are an expert tech writer specializing in AI and machine learning newsletters."
+                "content": "You are an expert tech writer for AI newsletters. Write clear, engaging summaries."
             },
             {"role": "user", "content": prompt}
         ],
@@ -83,19 +76,8 @@ def summarize_with_groq(text: str, section: str = "story") -> str | None:
         response.raise_for_status()
         summary = response.json()["choices"][0]["message"]["content"].strip()
         
-        # Filter out unwanted responses
-        if section == "events":
-            if not summary or "NO_EVENT" in summary.upper():
-                return None
-            if len(summary.split()) < 5:
-                return None
-        
-        # Clean up common prefixes
-        bad_prefixes = [
-            "here is a summary", "summary:", "in summary",
-            "this article discusses", "the article", "according to",
-        ]
-        
+        # Clean up unwanted prefixes
+        bad_prefixes = ["here is", "summary:", "this article", "the article"]
         summary_lower = summary.lower()
         for bp in bad_prefixes:
             if summary_lower.startswith(bp):
@@ -106,9 +88,6 @@ def summarize_with_groq(text: str, section: str = "story") -> str | None:
         
         return summary
         
-    except requests.Timeout:
-        print(f"⏱️ Groq timeout for {section}")
-        return None
     except Exception as e:
-        print(f"❌ Groq error for {section}: {e}")
+        print(f"❌ Groq error for {category}: {e}")
         return None
