@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ newsletter_title }}</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +14,9 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #1a1a1a;
             background: #f4f4f4;
         }
         
@@ -29,111 +30,131 @@
             max-width: 680px;
             margin: 0 auto;
             background: #fff;
-            border-radius: 8px;
+            border-radius: 0;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 32px 24px;
+        /* BLACK HEADER BANNER - Like The Rundown AI */
+        .header-banner {
+            background: #000;
+            padding: 32px;
             text-align: center;
         }
         
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
+        .header-logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: #fff;
             margin-bottom: 8px;
+            letter-spacing: -1px;
         }
         
-        .header .tagline {
+        .header-tagline {
             font-size: 14px;
-            opacity: 0.95;
-            margin-bottom: 12px;
+            color: #999;
+            font-weight: 500;
         }
         
-        .header .date {
+        .header-date {
             font-size: 13px;
-            opacity: 0.85;
-        }
-        
-        /* Greeting */
-        .greeting {
-            padding: 24px 24px 16px;
-        }
-        
-        .greeting p {
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        
-        .intro-text {
-            font-size: 15px;
             color: #666;
-            line-height: 1.7;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #333;
         }
         
-        /* Summary Box */
-        .summary-box {
+        /* GREETING & DYNAMIC SUMMARY */
+        .greeting {
+            padding: 32px;
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .greeting-text {
+            font-size: 16px;
+            color: #1a1a1a;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .greeting-text strong {
+            font-weight: 700;
+        }
+        
+        .dynamic-summary {
             background: #f8f9fa;
             border-left: 4px solid #667eea;
-            padding: 20px 24px;
-            margin: 0 24px 24px;
-            border-radius: 6px;
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 20px;
         }
         
-        .summary-box h3 {
-            font-size: 18px;
-            margin-bottom: 12px;
+        .summary-heading {
+            font-size: 17px;
+            font-weight: 800;
             color: #1a1a1a;
+            margin-bottom: 16px;
         }
         
-        .summary-box p {
-            font-size: 14px;
-            color: #555;
+        .headline-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .headline-item {
+            font-size: 15px;
+            color: #374151;
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
             line-height: 1.6;
         }
         
-        /* Section Header */
+        .headline-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: 900;
+            font-size: 20px;
+        }
+        
+        /* SECTION HEADERS */
         .section-header {
-            background: #000;
+            background: #1a1a1a;
             color: #fff;
-            padding: 12px 24px;
+            padding: 16px 32px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            text-align: center;
+            letter-spacing: 1.5px;
+            margin-top: 32px;
         }
         
-        /* Article Section */
-        .article-section {
-            padding: 24px;
-        }
-        
+        /* ARTICLE CARDS */
         .article-card {
-            border: 1px solid #e5e5e5;
-            border-radius: 10px;
-            margin-bottom: 24px;
+            margin: 32px;
+            border-radius: 12px;
             overflow: hidden;
             background: #fff;
-            transition: box-shadow 0.3s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e5e7eb;
         }
         
         .article-card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         }
         
-        /* FIXED: Better image sizing - no cutoff */
         .article-image-wrapper {
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             position: relative;
             overflow: hidden;
-            background: #f0f0f0;
+            background: #f3f4f6;
         }
         
         .article-image {
@@ -143,14 +164,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
         }
         
-        /* YouTube Video Embed */
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             background: #000;
@@ -166,28 +185,29 @@
         }
         
         .article-content {
-            padding: 20px;
+            padding: 24px;
         }
         
         .article-source {
             display: inline-block;
             background: #667eea;
             color: #fff;
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            padding: 4px 12px;
-            border-radius: 12px;
-            margin-bottom: 12px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            margin-bottom: 16px;
             letter-spacing: 0.8px;
         }
         
         .article-title {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 21px;
+            font-weight: 800;
             color: #1a1a1a;
             margin-bottom: 12px;
             line-height: 1.3;
+            letter-spacing: -0.3px;
         }
         
         .article-title a {
@@ -200,8 +220,8 @@
         }
         
         .article-summary {
-            font-size: 15px;
-            color: #555;
+            font-size: 16px;
+            color: #4b5563;
             line-height: 1.7;
             margin-bottom: 16px;
         }
@@ -210,19 +230,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #eee;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
         }
         
         .article-date {
-            font-size: 12px;
-            color: #999;
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 600;
         }
         
         .read-more {
             color: #667eea;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
         }
         
@@ -230,82 +251,160 @@
             text-decoration: underline;
         }
         
-        /* FIXED: Rating Section - Match The Rundown AI style */
-        .feedback {
-            background: #f9f9f9;
-            padding: 32px 24px;
-            text-align: center;
-            border-top: 2px solid #eee;
+        /* TRENDING TOOLS SECTION */
+        .tools-section {
+            background: #f8f9fa;
+            padding: 32px;
+            margin: 32px 0;
         }
         
-        .feedback h3 {
+        .tools-title {
             font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-weight: 800;
             color: #1a1a1a;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
         }
         
-        .feedback p {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 24px;
+        .tools-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tool-item {
+            background: #fff;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        
+        .tool-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 6px;
+        }
+        
+        .tool-name:hover {
+            color: #667eea;
+        }
+        
+        .tool-description {
+            font-size: 14px;
+            color: #6b7280;
             line-height: 1.6;
         }
         
-        /* FIXED: Clean star-only rating buttons */
+        /* FEEDBACK SECTION */
+        .feedback {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 48px 32px;
+            text-align: center;
+            margin-top: 32px;
+        }
+        
+        .feedback h3 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        
+        .feedback-subtitle {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 32px;
+        }
+        
         .rating-buttons {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 16px;
             flex-wrap: wrap;
+            margin-bottom: 24px;
         }
         
         .rating-btn {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 6px;
             text-decoration: none;
-            font-size: 22px;
-            background: #fff;
-            border: 2px solid #e5e5e5;
-            transition: all 0.2s ease;
-            line-height: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 16px 20px;
+            transition: all 0.3s;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 3px solid transparent;
         }
         
         .rating-btn:hover {
-            transform: scale(1.1);
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
         }
         
-        .feedback-cta {
-            display: inline-block;
-            background: #667eea;
-            color: #fff;
-            padding: 12px 32px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            margin-top: 12px;
+        .star-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
         
-        .feedback-cta:hover {
-            background: #764ba2;
+        .rating-btn .stars {
+            font-size: 24px;
+            display: block;
         }
         
-        /* Footer */
+        .rating-label-text {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .rating-btn.excellent .stars { color: #10b981; }
+        .rating-btn.excellent .rating-label-text { color: #10b981; }
+        .rating-btn.excellent:hover { border-color: #10b981; background: #10b981; }
+        .rating-btn.excellent:hover .stars,
+        .rating-btn.excellent:hover .rating-label-text { color: #fff; }
+        
+        .rating-btn.good .stars { color: #3b82f6; }
+        .rating-btn.good .rating-label-text { color: #3b82f6; }
+        .rating-btn.good:hover { border-color: #3b82f6; background: #3b82f6; }
+        .rating-btn.good:hover .stars,
+        .rating-btn.good:hover .rating-label-text { color: #fff; }
+        
+        .rating-btn.average .stars { color: #f59e0b; }
+        .rating-btn.average .rating-label-text { color: #f59e0b; }
+        .rating-btn.average:hover { border-color: #f59e0b; background: #f59e0b; }
+        .rating-btn.average:hover .stars,
+        .rating-btn.average:hover .rating-label-text { color: #fff; }
+        
+        .rating-btn.poor .stars { color: #ef4444; }
+        .rating-btn.poor .rating-label-text { color: #ef4444; }
+        .rating-btn.poor:hover { border-color: #ef4444; background: #ef4444; }
+        .rating-btn.poor:hover .stars,
+        .rating-btn.poor:hover .rating-label-text { color: #fff; }
+        
+        .rating-btn.verypoor .stars { color: #dc2626; }
+        .rating-btn.verypoor .rating-label-text { color: #dc2626; }
+        .rating-btn.verypoor:hover { border-color: #dc2626; background: #dc2626; }
+        .rating-btn.verypoor:hover .stars,
+        .rating-btn.verypoor:hover .rating-label-text { color: #fff; }
+        
+        /* FOOTER */
         .footer {
             background: #1a1a1a;
-            color: #ccc;
-            padding: 32px 24px;
+            color: #cbd5e0;
+            padding: 32px;
             text-align: center;
         }
         
         .footer-brand {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             color: #fff;
             margin-bottom: 12px;
         }
@@ -317,54 +416,43 @@
         
         .footer-links {
             margin: 20px 0;
+            padding: 16px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .footer-links a {
             color: #667eea;
             text-decoration: none;
             margin: 0 12px;
-            font-size: 14px;
+            font-weight: 600;
         }
         
         .footer-links a:hover {
-            text-decoration: underline;
+            color: #fff;
         }
         
-        .footer-signature {
-            font-size: 12px;
-            color: #888;
-            margin-top: 20px;
-            font-style: italic;
-        }
-        
-        /* Responsive */
+        /* RESPONSIVE */
         @media only screen and (max-width: 600px) {
             .email-container {
-                width: 100% !important;
                 border-radius: 0;
             }
             
-            .header h1 {
-                font-size: 24px;
+            .header-banner, .greeting, .article-content, .tools-section, .feedback, .footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .article-card {
+                margin: 20px;
             }
             
             .article-title {
-                font-size: 18px;
+                font-size: 19px;
             }
             
             .rating-buttons {
-                gap: 8px;
-            }
-            
-            .rating-btn {
-                padding: 6px 12px;
-                font-size: 20px;
-            }
-            
-            .article-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
+                gap: 12px;
             }
         }
     </style>
@@ -373,231 +461,210 @@
     <div class="email-wrapper">
         <div class="email-container">
             
-            <!-- Header -->
-            <div class="header">
-                <h1>🤖 {{ newsletter_title }}</h1>
-                <p class="tagline">Your Weekly AI & ML Update from CSE(AI&ML) Department</p>
-                <p class="date">{{ current_date }}</p>
+            <!-- BLACK HEADER BANNER -->
+            <div class="header-banner">
+                <div class="header-logo">🤖 CSE(AI&ML) Weekly Newsletter</div>
+                <div class="header-tagline">Your Weekly AI & ML Update from Department of CSE (AI & ML)</div>
+                <div class="header-date">{{ current_date }}</div>
             </div>
             
-            <!-- Greeting -->
+            <!-- GREETING & DYNAMIC SUMMARY -->
             <div class="greeting">
-                <p>Good {{ time_of_day }}, {{ recipient_name }}! 👋</p>
-                <p class="intro-text">
-                    This week in AI & ML: From breakthrough research to cutting-edge tools, 
-                    here's everything you need to know in 5 minutes or less.
-                </p>
-            </div>
-            
-            <!-- Summary Box -->
-            <div class="summary-box">
-                <h3>📊 This Week's Summary</h3>
-                <p>
-                    We've curated <strong>{{ total_articles }} articles</strong> across 
-                    {{ developments|length }} latest developments, 
-                    {{ training|length }} training resources, 
-                    {{ research|length }} research papers, 
-                    {{ tools|length }} AI tools, and 
-                    {{ startups|length }} new startups.
-                </p>
-            </div>
-            
-            <!-- Latest Developments -->
-            {% if developments %}
-            <div class="section-header">LATEST DEVELOPMENTS</div>
-            <div class="article-section">
-                {% for article in developments %}
-                <div class="article-card">
-                    <!-- Video or Image -->
-                    {% if article.video_id %}
-                    <div class="video-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/{{ article.video_id }}" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    {% elif article.image %}
-                    <div class="article-image-wrapper">
-                        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image">
-                    </div>
-                    {% endif %}
+                <p class="greeting-text">Good {{ time_of_day }}, <strong>{{ recipient_name }}</strong>. 👋</p>
+                
+                <div class="dynamic-summary">
+                    <p style="font-size: 16px; line-height: 1.8; color: #374151; margin-bottom: 20px;">
+                        This week in AI & Machine Learning: From breakthrough research to cutting-edge tools, here's everything you need to know to stay ahead in the rapidly evolving AI landscape.
+                    </p>
                     
-                    <div class="article-content">
-                        <span class="article-source">{{ article.source }}</span>
-                        <h2 class="article-title">
-                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                        </h2>
-                        <p class="article-summary">{{ article.summary }}</p>
-                        <div class="article-meta">
-                            <span class="article-date">{{ article.published_date }}</span>
-                            <a href="{{ article.link }}" class="read-more" target="_blank">Read more →</a>
-                        </div>
+                    <p class="summary-heading">📰 In today's edition:</p>
+                    <ul class="headline-list">
+                        {% if development %}
+                        <li class="headline-item">{{ development.title }}</li>
+                        {% endif %}
+                        {% if training %}
+                        <li class="headline-item">{{ training.title }}</li>
+                        {% endif %}
+                        {% if research %}
+                        <li class="headline-item">{{ research.title }}</li>
+                        {% endif %}
+                        {% if trending_tools %}
+                        <li class="headline-item">{{ trending_tools|length }} trending AI tools to explore</li>
+                        {% endif %}
+                        {% if startup %}
+                        <li class="headline-item">{{ startup.title }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- LATEST DEVELOPMENTS -->
+            {% if development %}
+            <div class="section-header">📈 LATEST DEVELOPMENTS</div>
+            <div class="article-card">
+                {% if development.video_id %}
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/{{ development.video_id }}" allowfullscreen></iframe>
+                </div>
+                {% elif development.image %}
+                <div class="article-image-wrapper">
+                    <img src="{{ development.image }}" alt="{{ development.title }}" class="article-image">
+                </div>
+                {% endif %}
+                
+                <div class="article-content">
+                    <span class="article-source">{{ development.source }}</span>
+                    <h2 class="article-title">
+                        <a href="{{ development.link }}" target="_blank">{{ development.title }}</a>
+                    </h2>
+                    <p class="article-summary">{{ development.summary }}</p>
+                    <div class="article-meta">
+                        <span class="article-date">{{ development.published_date }}</span>
+                        <a href="{{ development.link }}" class="read-more" target="_blank">Read more →</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
             {% endif %}
             
-            <!-- AI Training -->
+            <!-- AI TRAINING -->
             {% if training %}
             <div class="section-header">🎓 AI TRAINING</div>
-            <div class="article-section">
-                {% for article in training %}
-                <div class="article-card">
-                    {% if article.video_id %}
-                    <div class="video-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/{{ article.video_id }}" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    {% elif article.image %}
-                    <div class="article-image-wrapper">
-                        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image">
-                    </div>
-                    {% endif %}
-                    
-                    <div class="article-content">
-                        <span class="article-source">{{ article.source }}</span>
-                        <h2 class="article-title">
-                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                        </h2>
-                        <p class="article-summary">{{ article.summary }}</p>
-                        <div class="article-meta">
-                            <span class="article-date">{{ article.published_date }}</span>
-                            <a href="{{ article.link }}" class="read-more" target="_blank">Read more →</a>
-                        </div>
+            <div class="article-card">
+                {% if training.video_id %}
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/{{ training.video_id }}" allowfullscreen></iframe>
+                </div>
+                {% elif training.image %}
+                <div class="article-image-wrapper">
+                    <img src="{{ training.image }}" alt="{{ training.title }}" class="article-image">
+                </div>
+                {% endif %}
+                
+                <div class="article-content">
+                    <span class="article-source">{{ training.source }}</span>
+                    <h2 class="article-title">
+                        <a href="{{ training.link }}" target="_blank">{{ training.title }}</a>
+                    </h2>
+                    <p class="article-summary">{{ training.summary }}</p>
+                    <div class="article-meta">
+                        <span class="article-date">{{ training.published_date }}</span>
+                        <a href="{{ training.link }}" class="read-more" target="_blank">Read more →</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
             {% endif %}
             
-            <!-- AI Research -->
+            <!-- AI RESEARCH -->
             {% if research %}
             <div class="section-header">🔬 AI RESEARCH</div>
-            <div class="article-section">
-                {% for article in research %}
-                <div class="article-card">
-                    {% if article.video_id %}
-                    <div class="video-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/{{ article.video_id }}" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    {% elif article.image %}
-                    <div class="article-image-wrapper">
-                        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image">
-                    </div>
-                    {% endif %}
-                    
-                    <div class="article-content">
-                        <span class="article-source">{{ article.source }}</span>
-                        <h2 class="article-title">
-                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                        </h2>
-                        <p class="article-summary">{{ article.summary }}</p>
-                        <div class="article-meta">
-                            <span class="article-date">{{ article.published_date }}</span>
-                            <a href="{{ article.link }}" class="read-more" target="_blank">Read more →</a>
-                        </div>
+            <div class="article-card">
+                {% if research.video_id %}
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/{{ research.video_id }}" allowfullscreen></iframe>
+                </div>
+                {% elif research.image %}
+                <div class="article-image-wrapper">
+                    <img src="{{ research.image }}" alt="{{ research.title }}" class="article-image">
+                </div>
+                {% endif %}
+                
+                <div class="article-content">
+                    <span class="article-source">{{ research.source }}</span>
+                    <h2 class="article-title">
+                        <a href="{{ research.link }}" target="_blank">{{ research.title }}</a>
+                    </h2>
+                    <p class="article-summary">{{ research.summary }}</p>
+                    <div class="article-meta">
+                        <span class="article-date">{{ research.published_date }}</span>
+                        <a href="{{ research.link }}" class="read-more" target="_blank">Read more →</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
             {% endif %}
             
-            <!-- AI Tools -->
-            {% if tools %}
-            <div class="section-header">🔧 AI TOOLS</div>
-            <div class="article-section">
-                {% for article in tools %}
-                <div class="article-card">
-                    {% if article.video_id %}
-                    <div class="video-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/{{ article.video_id }}" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    {% elif article.image %}
-                    <div class="article-image-wrapper">
-                        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image">
-                    </div>
-                    {% endif %}
-                    
-                    <div class="article-content">
-                        <span class="article-source">{{ article.source }}</span>
-                        <h2 class="article-title">
-                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                        </h2>
-                        <p class="article-summary">{{ article.summary }}</p>
-                        <div class="article-meta">
-                            <span class="article-date">{{ article.published_date }}</span>
-                            <a href="{{ article.link }}" class="read-more" target="_blank">Read more →</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <!-- TRENDING AI TOOLS -->
+            {% if trending_tools %}
+            <div class="tools-section">
+                <h2 class="tools-title">🔧 Trending AI Tools</h2>
+                <ul class="tools-list">
+                    {% for tool in trending_tools %}
+                    <li class="tool-item">
+                        <a href="{{ tool.link }}" class="tool-name" target="_blank">{{ tool.name }}</a>
+                        <p class="tool-description">{{ tool.description }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
             {% endif %}
             
-            <!-- AI Startups -->
-            {% if startups %}
+            <!-- AI STARTUPS -->
+            {% if startup %}
             <div class="section-header">🚀 NEW AI STARTUPS</div>
-            <div class="article-section">
-                {% for article in startups %}
-                <div class="article-card">
-                    {% if article.video_id %}
-                    <div class="video-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/{{ article.video_id }}" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    {% elif article.image %}
-                    <div class="article-image-wrapper">
-                        <img src="{{ article.image }}" alt="{{ article.title }}" class="article-image">
-                    </div>
-                    {% endif %}
-                    
-                    <div class="article-content">
-                        <span class="article-source">{{ article.source }}</span>
-                        <h2 class="article-title">
-                            <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                        </h2>
-                        <p class="article-summary">{{ article.summary }}</p>
-                        <div class="article-meta">
-                            <span class="article-date">{{ article.published_date }}</span>
-                            <a href="{{ article.link }}" class="read-more" target="_blank">Read more →</a>
-                        </div>
+            <div class="article-card">
+                {% if startup.video_id %}
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/{{ startup.video_id }}" allowfullscreen></iframe>
+                </div>
+                {% elif startup.image %}
+                <div class="article-image-wrapper">
+                    <img src="{{ startup.image }}" alt="{{ startup.title }}" class="article-image">
+                </div>
+                {% endif %}
+                
+                <div class="article-content">
+                    <span class="article-source">{{ startup.source }}</span>
+                    <h2 class="article-title">
+                        <a href="{{ startup.link }}" target="_blank">{{ startup.title }}</a>
+                    </h2>
+                    <p class="article-summary">{{ startup.summary }}</p>
+                    <div class="article-meta">
+                        <span class="article-date">{{ startup.published_date }}</span>
+                        <a href="{{ startup.link }}" class="read-more" target="_blank">Read more →</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
             {% endif %}
             
-            <!-- FIXED: Rating Section - Stars only, no text labels -->
+            <!-- FEEDBACK -->
             <div class="feedback">
-                <h3>That's it for today!</h3>
-                <p>Before you go we'd love to know what you thought of today's newsletter to help us improve the experience for you.</p>
+                <h3>💭 We Value Your Feedback</h3>
+                <p class="feedback-subtitle">How would you rate today's newsletter?</p>
                 
                 <div class="rating-buttons">
-                    <a href="{{ feedback_url }}?rating=5" class="rating-btn" title="Excellent">⭐⭐⭐⭐⭐</a>
-                    <a href="{{ feedback_url }}?rating=3" class="rating-btn" title="Average">⭐⭐⭐</a>
-                    <a href="{{ feedback_url }}?rating=1" class="rating-btn" title="Poor">⭐</a>
+                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=5" class="rating-btn excellent">
+                        <div class="star-container">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-label-text">Excellent</span>
+                        </div>
+                    </a>
+                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=4" class="rating-btn good">
+                        <div class="star-container">
+                            <span class="stars">★★★★</span>
+                            <span class="rating-label-text">Good</span>
+                        </div>
+                    </a>
+                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=3" class="rating-btn average">
+                        <div class="star-container">
+                            <span class="stars">★★★</span>
+                            <span class="rating-label-text">Average</span>
+                        </div>
+                    </a>
+                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=2" class="rating-btn poor">
+                        <div class="star-container">
+                            <span class="stars">★★</span>
+                            <span class="rating-label-text">Poor</span>
+                        </div>
+                    </a>
+                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=1" class="rating-btn verypoor">
+                        <div class="star-container">
+                            <span class="stars">★</span>
+                            <span class="rating-label-text">Very Poor</span>
+                        </div>
+                    </a>
                 </div>
-                
-                <a href="{{ feedback_url }}" class="feedback-cta">Share Detailed Feedback</a>
             </div>
             
-            <!-- Footer -->
+            <!-- FOOTER -->
             <div class="footer">
                 <div class="footer-brand">CSE(AI&ML) Newsletter</div>
                 <p>Delivered weekly every Friday at 4 PM IST</p>
@@ -609,10 +676,7 @@
                     <a href="{{ archive_url }}">Archive</a>
                 </div>
                 
-                <p class="footer-signature">
-                    {{ team_signature }}<br>
-                    Powered by AI Newsletter Automation System
-                </p>
+                <p style="font-size: 13px; color: #718096; margin-top: 16px;">© {{ year }} - All rights reserved</p>
             </div>
             
         </div>

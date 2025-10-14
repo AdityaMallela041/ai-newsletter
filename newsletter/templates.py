@@ -6,16 +6,23 @@ import os
 TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "..", "templates")
 
 def render_newsletter(data):
-    """Render newsletter with categorized content"""
+    """
+    Render newsletter with all data including trending tools
+    """
     
-    # Extract categories
-    developments = data.get("developments") or []
-    training = data.get("training") or []
-    research = data.get("research") or []
-    tools = data.get("tools") or []
-    startups = data.get("startups") or []
+    # Extract single articles (not lists)
+    development = data.get("development")
+    training = data.get("training")
+    research = data.get("research")
+    startup = data.get("startup")
+    trending_tools = data.get("trending_tools", [])  # ADD THIS LINE
     
-    # Determine time of day
+    # Count total
+    articles = [development, training, research, startup]
+    total_articles = sum(1 for a in articles if a)
+    video_count = sum(1 for a in articles if a and a.get("video_id"))
+    
+    # Time-based greeting
     current_hour = datetime.now().hour
     if current_hour < 12:
         time_of_day = "morning"
@@ -24,25 +31,27 @@ def render_newsletter(data):
     else:
         time_of_day = "evening"
     
-    # Calculate total articles for summary
-    total_articles = len(developments) + len(training) + len(research) + len(tools) + len(startups)
-
+    # Load template
     env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
     template = env.get_template("newsletter.html")
-
+    
     return template.render(
+        # Header
         newsletter_title="CSE(AI&ML) Weekly Newsletter",
         current_date=datetime.now().strftime("%A, %B %d, %Y"),
         time_of_day=time_of_day,
         recipient_name=data.get("recipient_name", "Student"),
         
-        # Categorized content
-        developments=developments,
+        # Summary
+        total_articles=total_articles,
+        video_count=video_count,
+        
+        # Single articles per category
+        development=development,
         training=training,
         research=research,
-        tools=tools,
-        startups=startups,
-        total_articles=total_articles,
+        startup=startup,
+        trending_tools=trending_tools,  # ADD THIS LINE
         
         # Metadata
         feedback_url=data.get("feedback_url", "#"),
@@ -50,5 +59,5 @@ def render_newsletter(data):
         unsubscribe_url=data.get("unsubscribe_url", "#"),
         preferences_url=data.get("preferences_url", "#"),
         archive_url=data.get("archive_url", "#"),
-        team_signature="CSE(AI&ML) Newsletter Team"
+        year=datetime.now().year
     )
