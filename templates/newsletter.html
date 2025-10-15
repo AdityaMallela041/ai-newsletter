@@ -35,10 +35,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         
-        /* BLACK HEADER BANNER - Like The Rundown AI */
+        /* BLACK HEADER BANNER */
         .header-banner {
             background: #000;
-            padding: 32px;
+            padding: 40px 32px;  /* INCREASED padding */
             text-align: center;
         }
         
@@ -64,9 +64,9 @@
             border-top: 1px solid #333;
         }
         
-        /* GREETING & DYNAMIC SUMMARY */
+        /* GREETING & SUMMARY - MORE SPACING */
         .greeting {
-            padding: 32px;
+            padding: 40px 32px;  /* INCREASED from 32px */
             background: #fff;
             border-bottom: 1px solid #e5e7eb;
         }
@@ -75,7 +75,7 @@
             font-size: 16px;
             color: #1a1a1a;
             line-height: 1.8;
-            margin-bottom: 20px;
+            margin-bottom: 24px;  /* INCREASED from 20px */
         }
         
         .greeting-text strong {
@@ -85,56 +85,59 @@
         .dynamic-summary {
             background: #f8f9fa;
             border-left: 4px solid #667eea;
-            padding: 24px;
+            padding: 28px;  /* INCREASED from 24px */
             border-radius: 8px;
-            margin-top: 20px;
+            margin-top: 24px;  /* INCREASED from 20px */
         }
         
         .summary-heading {
             font-size: 17px;
             font-weight: 800;
             color: #1a1a1a;
-            margin-bottom: 16px;
+            margin-bottom: 20px;  /* INCREASED from 16px */
         }
         
         .headline-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
         
         .headline-item {
             font-size: 15px;
             color: #374151;
-            margin-bottom: 12px;
-            padding-left: 24px;
+            margin-bottom: 12px;  /* INCREASED from 10px */
             position: relative;
-            line-height: 1.6;
+            line-height: 1.7;
+            display: flex;
+            align-items: flex-start;
         }
         
         .headline-item::before {
             content: "•";
-            position: absolute;
-            left: 0;
             color: #667eea;
             font-weight: 900;
             font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            line-height: 1.7;
         }
         
-        /* SECTION HEADERS */
+        /* SECTION HEADERS - MORE SPACING */
         .section-header {
             background: #1a1a1a;
             color: #fff;
-            padding: 16px 32px;
+            padding: 18px 32px;  /* INCREASED from 16px */
             font-size: 13px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-top: 32px;
+            margin-top: 48px;  /* INCREASED from 32px */
         }
         
-        /* ARTICLE CARDS */
+        /* ARTICLE CARDS - MORE SPACING */
         .article-card {
-            margin: 32px;
+            margin: 40px 32px;  /* INCREASED from 32px */
             border-radius: 12px;
             overflow: hidden;
             background: #fff;
@@ -185,7 +188,7 @@
         }
         
         .article-content {
-            padding: 24px;
+            padding: 28px;  /* INCREASED from 24px */
         }
         
         .article-source {
@@ -205,7 +208,7 @@
             font-size: 21px;
             font-weight: 800;
             color: #1a1a1a;
-            margin-bottom: 12px;
+            margin-bottom: 16px;  /* INCREASED from 12px */
             line-height: 1.3;
             letter-spacing: -0.3px;
         }
@@ -222,8 +225,20 @@
         .article-summary {
             font-size: 16px;
             color: #4b5563;
-            line-height: 1.7;
-            margin-bottom: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;  /* INCREASED from 16px */
+            white-space: pre-line;
+        }
+        
+        .article-summary strong {
+            display: block;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 15px;
+            margin-top: 16px;  /* INCREASED from 12px */
+            margin-bottom: 10px;  /* INCREASED from 8px */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .article-meta {
@@ -251,11 +266,11 @@
             text-decoration: underline;
         }
         
-        /* TRENDING TOOLS SECTION */
+        /* TRENDING TOOLS SECTION - CLEANER */
         .tools-section {
-            background: #f8f9fa;
-            padding: 32px;
-            margin: 32px 0;
+            background: #fff;  /* CHANGED from #f8f9fa */
+            padding: 0;  /* REMOVED padding */
+            margin: 48px 0 0 0;  /* INCREASED top margin */
         }
         
         .tools-title {
@@ -263,22 +278,29 @@
             font-weight: 800;
             color: #1a1a1a;
             margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 3px solid #667eea;
+            padding: 32px 32px 0 32px;  /* ADDED padding only to title */
         }
         
         .tools-list {
             list-style: none;
-            padding: 0;
+            padding: 0 32px 32px 32px;  /* UPDATED padding */
+            margin: 0;
         }
         
         .tool-item {
-            background: #fff;
-            padding: 16px 20px;
-            margin-bottom: 12px;
+            background: #f8f9fa;  /* LIGHTER background */
+            padding: 20px 24px;  /* INCREASED padding */
+            margin-bottom: 16px;  /* INCREASED from 12px */
             border-radius: 8px;
             border-left: 4px solid #667eea;
             box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            transition: all 0.3s;  /* ADDED */
+        }
+        
+        .tool-item:hover {
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateX(4px);
         }
         
         .tool-name {
@@ -287,7 +309,7 @@
             color: #1a1a1a;
             text-decoration: none;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;  /* INCREASED from 6px */
         }
         
         .tool-name:hover {
@@ -297,108 +319,86 @@
         .tool-description {
             font-size: 14px;
             color: #6b7280;
-            line-height: 1.6;
+            line-height: 1.7;  /* INCREASED from 1.6 */
         }
         
-        /* FEEDBACK SECTION */
+        /* FEEDBACK SECTION - CLEAN, NO GRADIENT */
         .feedback {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 48px 32px;
+            background: #f8f9fa;
+            padding: 56px 32px;
             text-align: center;
-            margin-top: 32px;
+            margin-top: 56px;
+            border-top: 3px solid #667eea;
         }
-        
+
         .feedback h3 {
             font-size: 28px;
             font-weight: 800;
-            color: #fff;
+            color: #1a1a1a;
             margin-bottom: 12px;
         }
-        
+
         .feedback-subtitle {
             font-size: 16px;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 32px;
+            color: #6b7280;
+            margin-bottom: 40px;
         }
-        
-        .rating-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-        
-        .rating-btn {
-            text-decoration: none;
-            background: rgba(255,255,255,0.95);
-            border-radius: 12px;
-            padding: 16px 20px;
-            transition: all 0.3s;
+
+        /* STAR RATING WRAPPER */
+        .star-rating-wrapper {
             display: inline-block;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border: 3px solid transparent;
         }
-        
-        .rating-btn:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-        }
-        
-        .star-container {
+
+        .star-rating {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
         }
-        
-        .rating-btn .stars {
-            font-size: 24px;
-            display: block;
+
+        .star-link {
+            text-decoration: none;
+            font-size: 56px;  /* Large stars */
+            color: #d1d5db;  /* Gray by default */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
+            line-height: 1;
         }
-        
-        .rating-label-text {
-            font-size: 12px;
-            font-weight: 700;
+
+        .star-link:hover {
+            transform: scale(1.15);
+        }
+
+        /* RATING LABEL */
+        .rating-label {
+            font-size: 16px;
+            color: #9ca3af;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            min-height: 24px;  /* Prevent layout shift */
         }
-        
-        .rating-btn.excellent .stars { color: #10b981; }
-        .rating-btn.excellent .rating-label-text { color: #10b981; }
-        .rating-btn.excellent:hover { border-color: #10b981; background: #10b981; }
-        .rating-btn.excellent:hover .stars,
-        .rating-btn.excellent:hover .rating-label-text { color: #fff; }
-        
-        .rating-btn.good .stars { color: #3b82f6; }
-        .rating-btn.good .rating-label-text { color: #3b82f6; }
-        .rating-btn.good:hover { border-color: #3b82f6; background: #3b82f6; }
-        .rating-btn.good:hover .stars,
-        .rating-btn.good:hover .rating-label-text { color: #fff; }
-        
-        .rating-btn.average .stars { color: #f59e0b; }
-        .rating-btn.average .rating-label-text { color: #f59e0b; }
-        .rating-btn.average:hover { border-color: #f59e0b; background: #f59e0b; }
-        .rating-btn.average:hover .stars,
-        .rating-btn.average:hover .rating-label-text { color: #fff; }
-        
-        .rating-btn.poor .stars { color: #ef4444; }
-        .rating-btn.poor .rating-label-text { color: #ef4444; }
-        .rating-btn.poor:hover { border-color: #ef4444; background: #ef4444; }
-        .rating-btn.poor:hover .stars,
-        .rating-btn.poor:hover .rating-label-text { color: #fff; }
-        
-        .rating-btn.verypoor .stars { color: #dc2626; }
-        .rating-btn.verypoor .rating-label-text { color: #dc2626; }
-        .rating-btn.verypoor:hover { border-color: #dc2626; background: #dc2626; }
-        .rating-btn.verypoor:hover .stars,
-        .rating-btn.verypoor:hover .rating-label-text { color: #fff; }
-        
+
+        /* RESPONSIVE */
+        @media only screen and (max-width: 600px) {
+            .star-link {
+                font-size: 44px;
+                gap: 8px;
+            }
+            
+            .feedback {
+                padding: 40px 20px;
+            }
+        }
+
+
         /* FOOTER */
         .footer {
             background: #1a1a1a;
             color: #cbd5e0;
-            padding: 32px;
+            padding: 40px 32px;  /* INCREASED from 32px */
             text-align: center;
         }
         
@@ -415,8 +415,8 @@
         }
         
         .footer-links {
-            margin: 20px 0;
-            padding: 16px 0;
+            margin: 24px 0;  /* INCREASED from 20px */
+            padding: 20px 0;  /* INCREASED from 16px */
             border-top: 1px solid rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
@@ -444,7 +444,7 @@
             }
             
             .article-card {
-                margin: 20px;
+                margin: 30px 20px;
             }
             
             .article-title {
@@ -452,7 +452,7 @@
             }
             
             .rating-buttons {
-                gap: 12px;
+                gap: 16px;
             }
         }
     </style>
@@ -582,10 +582,10 @@
             </div>
             {% endif %}
             
-            <!-- TRENDING AI TOOLS -->
+            <!-- TRENDING AI TOOLS WITH BLACK BANNER -->
             {% if trending_tools %}
+            <div class="section-header">🔧 TRENDING AI TOOLS</div>
             <div class="tools-section">
-                <h2 class="tools-title">🔧 Trending AI Tools</h2>
                 <ul class="tools-list">
                     {% for tool in trending_tools %}
                     <li class="tool-item">
@@ -625,45 +625,102 @@
             </div>
             {% endif %}
             
-            <!-- FEEDBACK -->
+            <!-- FEEDBACK SECTION - INTERACTIVE WITH COLORS & LABELS -->
             <div class="feedback">
                 <h3>💭 We Value Your Feedback</h3>
                 <p class="feedback-subtitle">How would you rate today's newsletter?</p>
                 
-                <div class="rating-buttons">
-                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=5" class="rating-btn excellent">
-                        <div class="star-container">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-label-text">Excellent</span>
-                        </div>
-                    </a>
-                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=4" class="rating-btn good">
-                        <div class="star-container">
-                            <span class="stars">★★★★</span>
-                            <span class="rating-label-text">Good</span>
-                        </div>
-                    </a>
-                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=3" class="rating-btn average">
-                        <div class="star-container">
-                            <span class="stars">★★★</span>
-                            <span class="rating-label-text">Average</span>
-                        </div>
-                    </a>
-                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=2" class="rating-btn poor">
-                        <div class="star-container">
-                            <span class="stars">★★</span>
-                            <span class="rating-label-text">Poor</span>
-                        </div>
-                    </a>
-                    <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=1" class="rating-btn verypoor">
-                        <div class="star-container">
-                            <span class="stars">★</span>
-                            <span class="rating-label-text">Very Poor</span>
-                        </div>
-                    </a>
+                <div class="star-rating-wrapper">
+                    <div class="star-rating" id="starRating">
+                        <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=1" 
+                        class="star-link" 
+                        data-rating="1" 
+                        data-label="Very Poor"
+                        onmouseover="hoverStars(1)" 
+                        onmouseout="resetStars()">★</a>
+                        <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=2" 
+                        class="star-link" 
+                        data-rating="2" 
+                        data-label="Poor"
+                        onmouseover="hoverStars(2)" 
+                        onmouseout="resetStars()">★</a>
+                        <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=3" 
+                        class="star-link" 
+                        data-rating="3" 
+                        data-label="Average"
+                        onmouseover="hoverStars(3)" 
+                        onmouseout="resetStars()">★</a>
+                        <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=4" 
+                        class="star-link" 
+                        data-rating="4" 
+                        data-label="Good"
+                        onmouseover="hoverStars(4)" 
+                        onmouseout="resetStars()">★</a>
+                        <a href="{{ feedback_url }}?newsletter_id={{ newsletter_id }}&rating=5" 
+                        class="star-link" 
+                        data-rating="5" 
+                        data-label="Excellent"
+                        onmouseover="hoverStars(5)" 
+                        onmouseout="resetStars()">★</a>
+                    </div>
+                    <p class="rating-label" id="ratingLabel">Click to rate</p>
                 </div>
+                
+                <script>
+                    function hoverStars(rating) {
+                        const stars = document.querySelectorAll('.star-link');
+                        const label = document.getElementById('ratingLabel');
+                        
+                        // Color mapping: 1=red, 2=orange, 3=yellow, 4=blue, 5=green
+                        const colors = {
+                            1: '#ef4444',  // Red
+                            2: '#f97316',  // Orange
+                            3: '#fbbf24',  // Yellow
+                            4: '#3b82f6',  // Blue
+                            5: '#10b981'   // Green
+                        };
+                        
+                        const labels = {
+                            1: 'Very Poor',
+                            2: 'Poor',
+                            3: 'Average',
+                            4: 'Good',
+                            5: 'Excellent'
+                        };
+                        
+                        // Fill stars up to rating
+                        stars.forEach((star, index) => {
+                            if (index < rating) {
+                                star.style.color = colors[rating];
+                                star.style.transform = 'scale(1.15)';
+                            } else {
+                                star.style.color = '#d1d5db';
+                                star.style.transform = 'scale(1)';
+                            }
+                        });
+                        
+                        // Update label
+                        label.textContent = labels[rating];
+                        label.style.color = colors[rating];
+                        label.style.fontWeight = '700';
+                    }
+                    
+                    function resetStars() {
+                        const stars = document.querySelectorAll('.star-link');
+                        const label = document.getElementById('ratingLabel');
+                        
+                        stars.forEach(star => {
+                            star.style.color = '#d1d5db';
+                            star.style.transform = 'scale(1)';
+                        });
+                        
+                        label.textContent = 'Click to rate';
+                        label.style.color = '#9ca3af';
+                        label.style.fontWeight = '600';
+                    }
+                </script>
             </div>
-            
+
             <!-- FOOTER -->
             <div class="footer">
                 <div class="footer-brand">CSE(AI&ML) Newsletter</div>
