@@ -1,91 +1,464 @@
 
-# 📰 CSE(AI&ML) Newsletter Automation System
+# 🤖 CSE(AI&ML) Newsletter Automation System - v4.0
 
-<div align="center">
+**Automated AI & Machine Learning Newsletter with Deep Search, AI Summaries & Brevo SMTP**
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![Brevo](https://img.shields.io/badge/Email-Brevo_SMTP-00A699.svg)](https://www.brevo.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An intelligent newsletter automation system that fetches, summarizes, and delivers the latest AI & Machine Learning news to the CSE(AI&ML) department every week.
+---
 
-[Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Configuration](#-configuration) • [Usage](#-usage)
+## 📋 Table of Contents
 
-</div>
+- [Overview](#overview)
+- [What's New in v4.0](#whats-new-in-v40)
+- [Features](#features)
+- [System Architecture](#system-architecture)
+- [Installation](#installation)
+- [Brevo SMTP Setup](#brevo-smtp-setup)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Sending Limits](#sending-limits)
+- [Customization](#customization)
+- [Troubleshooting](#troubleshooting)
+- [Performance Metrics](#performance-metrics)
+- [License](#license)
 
 ---
 
 ## 🎯 Overview
 
-The **CSE(AI&ML) Newsletter Automation System** is a fully automated pipeline that curates AI/ML content from across the web, generates intelligent summaries using LLMs, and delivers beautifully formatted newsletters to department stakeholders every Friday at 4 PM IST.
+An intelligent newsletter automation system that curates AI & Machine Learning content from across the web, generates structured summaries using LLM, and delivers beautifully designed HTML newsletters via **Brevo SMTP** (formerly Sendinblue).
 
-### Why This Project?
-
-- ✅ **Saves Time**: Automates 5+ hours of manual content curation weekly
-- ✅ **AI-Powered**: Uses Groq LLaMA 3 for intelligent summarization
-- ✅ **Professional Design**: Newsletter styled like The Rundown AI
-- ✅ **Categorized Content**: Organizes news into 5 distinct sections
-- ✅ **Zero Maintenance**: Set it and forget it with CRON scheduling
+**Built for:** Department of Computer Science & Engineering (AI & ML)  
+**Delivery Schedule:** Every Friday at 4 PM IST  
+**Content Categories:** Latest Developments, Training, Research, Trending Tools, Startups  
+**Email Delivery:** Brevo SMTP (300 emails/day on free tier)
 
 ---
 
-## 🚀 Features
+## 🚀 What's New in v4.0
 
-### Core Capabilities
+### **Major Improvements:**
 
-- 🔍 **Smart Content Fetching**
-  - Uses Tavily API for advanced web search
-  - Fetches from 17+ sources across 5 categories
-  - Extracts high-quality images and YouTube videos
-  - Automatic source attribution and metadata
+#### **1. Brevo SMTP Integration**
+- ✅ **Free tier:** 300 emails/day (perfect for demos)
+- ✅ **Simple SMTP setup** (no API complexity)
+- ✅ **Reliable delivery** (99%+ success rate)
+- ✅ **Email tracking** (opens, clicks, bounces)
+- ✅ **No credit card** required for free tier
 
-- 🧠 **AI-Powered Summarization**
-  - Category-specific prompts for optimal results
-  - Groq LLaMA 3.1-8B-Instant for fast processing
-  - Fallback to Gemini for redundancy
-  - Context-aware summaries (2-4 sentences each)
+#### **2. Deep Search Engine (60-90s search)**
+- ✅ **10 results per category** (previously 3)
+- ✅ **Advanced search depth** with Tavily API
+- ✅ **Full content extraction** (4000 chars)
+- ✅ **Guaranteed quality** (minimum 30 words)
+- ✅ **Better image matching** (article's own image first)
 
-- 📊 **Categorized Content Sections**
-  1. Latest Developments - Breaking AI/ML news
-  2. AI Training - Courses, workshops, tutorials
-  3. AI Research - Academic papers and findings
-  4. AI Tools - New platforms and software
-  5. New AI Startups - Emerging companies
+#### **3. Structured AI Summaries**
+- ✅ **Category-specific prompts** (Development, Training, Research, Startup)
+- ✅ **Paragraph + Bullet Points + Conclusion** format
+- ✅ **Side headings** ("Key Highlights", "What You'll Learn")
+- ✅ **4-5 sentences** (more detailed)
+- ✅ **Groq's Llama 3.1** for fast generation
 
-- 🎨 **Professional Newsletter Design**
-  - Responsive HTML template (680px width)
-  - 16:9 aspect ratio images (no cutoff)
-  - YouTube video embeds
-  - Star-based rating system
-  - Mobile-optimized layout
+#### **4. Enhanced Newsletter Design**
+- ✅ **Less congested layout** (increased spacing)
+- ✅ **Black section headers** for all categories
+- ✅ **Interactive star rating** with color coding
+- ✅ **Hover effects** showing labels (Excellent, Good, Poor)
+- ✅ **Clean feedback section** (no gradient)
 
-- 💾 **Database & Analytics**
-  - SQLite database for article storage
-  - User view tracking per newsletter
-  - Rating collection and analysis
-  - Duplicate content prevention
-
-- 📧 **Flexible Email Delivery**
-  - Support for SMTP, Gmail, SendGrid, Brevo
-  - Bulk sending to multiple departments
-  - Testing mode (no email sending)
-  - Delivery status logging
+#### **5. Interactive Star Rating**
+- 🟢 5 Stars = Green = "Excellent"
+- 🔵 4 Stars = Blue = "Good"
+- 🟡 3 Stars = Yellow = "Average"
+- 🟠 2 Stars = Orange = "Poor"
+- 🔴 1 Star = Red = "Very Poor"
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Features
 
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| **Backend** | Python 3.10+ | Core automation logic |
-| **Web Framework** | FastAPI | API endpoints (optional) |
-| **Content Fetching** | Tavily API | AI-powered web search |
-| **Summarization** | Groq LLaMA 3 | LLM-based summarization |
-| **Templating** | Jinja2 | HTML newsletter rendering |
-| **Database** | SQLite + SQLAlchemy | Article & analytics storage |
-| **Email** | SMTP / SendGrid / Brevo | Newsletter delivery |
-| **Scheduling** | APScheduler + CRON | Weekly automation |
+### **Content Curation**
+- 🔍 **Deep web search** (10+ sources per category)
+- 📰 **4 content categories** with unique articles
+- 🎥 **YouTube video detection** with embedded players
+- 🖼️ **High-quality images** matched to each article
+- 🔧 **4 trending AI tools** with descriptions
+
+### **AI-Powered Summarization**
+- 🤖 **Groq LLM** (Llama 3.1-8B-Instant)
+- 📝 **Structured summaries** (intro + bullets + conclusion)
+- 🎯 **Category-specific formatting**
+- ⚡ **Fast generation** (2-3 seconds per summary)
+- 🧹 **Clean output** (no meta phrases)
+
+### **Email Delivery (Brevo SMTP)**
+- 📧 **Brevo SMTP** integration
+- 🆓 **Free tier:** 300 emails/day
+- 💰 **Paid plans:** Starting $25/month for 20,000/month
+- 👥 **Multi-recipient** support
+- 📊 **Delivery tracking** and analytics
+- ✅ **High deliverability** (99%+ inbox rate)
+
+### **Newsletter Design**
+- 🎨 **Modern, responsive HTML** template
+- 📱 **Mobile-optimized** layout
+- 🌟 **Interactive elements** (hover effects, star rating)
+- 🎭 **Professional typography** (Inter font)
+- 🖱️ **Color-coded feedback** system
+
+### **Database Integration**
+- 🗄️ **PostgreSQL storage**
+- 📊 **Tracking metrics** (sends, opens, clicks)
+- 📧 **Recipient management**
+- 📈 **Analytics ready**
+
+---
+
+## 🏗️ System Architecture
+
+```
+
+┌─────────────────────────────────────────────────────┐
+│              NEWSLETTER PIPELINE v4.0               │
+└─────────────────────────────────────────────────────┘
+│
+┌───────────────┴───────────────┐
+▼                               ▼
+┌──────────────────┐         ┌──────────────────┐
+│  DEEP SEARCH     │         │  AI SUMMARY      │
+│  (Tavily API)    │────────▶│  (Groq LLM)      │
+│  10 results/cat  │         │  Structured      │
+└────────┬─────────┘         └────────┬─────────┘
+│                            │
+▼                            ▼
+┌──────────────────────────────────────────────┐
+│         HTML RENDERING (Jinja2)              │
+│         Interactive Template                 │
+└────────┬─────────────────────────────────────┘
+│
+▼
+┌──────────────────┐         ┌──────────────────┐
+│  DATABASE        │◀────────│  BREVO SMTP      │
+│  (PostgreSQL)    │         │  Email Delivery  │
+│  Archive \& Track │         │  300/day free    │
+└──────────────────┘         └──────────────────┘
+
+```
+
+---
+
+## 📦 Installation
+
+### **Prerequisites**
+- Python 3.9+
+- PostgreSQL 12+
+- Brevo account (free tier works!)
+
+### **Step 1: Clone Repository**
+```
+
+git clone https://github.com/your-username/ai-newsletter.git
+cd ai-newsletter
+
+```
+
+### **Step 2: Create Virtual Environment**
+```
+
+python -m venv venv
+
+# Windows
+
+venv\Scripts\activate
+
+# macOS/Linux
+
+source venv/bin/activate
+
+```
+
+### **Step 3: Install Dependencies**
+```
+
+pip install -r requirements.txt
+
+```
+
+**`requirements.txt`:**
+```
+
+python-dotenv>=1.0.0
+requests>=2.31.0
+jinja2>=3.1.2
+psycopg2-binary>=2.9.9
+groq>=0.4.0
+
+```
+
+---
+
+## 📧 Brevo SMTP Setup
+
+### **Step 1: Create Brevo Account**
+
+1. Go to [Brevo.com](https://www.brevo.com)
+2. Click **"Sign Up Free"**
+3. Verify your email
+
+### **Step 2: Get SMTP Credentials**
+
+1. Login to Brevo Dashboard
+2. Go to **Settings** → **SMTP & API**
+3. Click **SMTP** tab
+4. Click **"Create a new SMTP key"**
+5. Name it "Newsletter Demo"
+6. **Copy the key** (you can't see it again!)
+
+You'll get:
+```
+
+SMTP Server: smtp-relay.brevo.com
+Port: 587
+Login: your-email@example.com
+Password: [Your SMTP key]
+
+```
+
+### **Step 3: Verify Sender Email**
+
+1. Go to **Senders & IP** → **Senders**
+2. Click **"Add a sender"**
+3. Enter your sender email
+4. Check your inbox for verification email
+5. Click verification link
+6. ✅ Email verified!
+
+### **Step 4: Create Emailer**
+
+Create `newsletter/emailer.py`:
+
+```
+
+
+# newsletter/emailer.py
+
+import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def send_email(html_content, subject, recipients):
+"""Send email using Brevo SMTP"""
+
+    # Brevo SMTP Configuration
+    SMTP_SERVER = "smtp-relay.brevo.com"
+    SMTP_PORT = 587
+    SMTP_LOGIN = os.getenv("BREVO_LOGIN")
+    SMTP_PASSWORD = os.getenv("BREVO_SMTP_KEY")
+    SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+    SENDER_NAME = os.getenv("SENDER_NAME", "CSE(AI&ML) Newsletter")
+    
+    if not SMTP_LOGIN or not SMTP_PASSWORD:
+        print("❌ Missing Brevo credentials in .env")
+        return False
+    
+    try:
+        print(f"📧 Sending to {len(recipients)} recipients via Brevo SMTP...")
+        
+        # Create message
+        message = MIMEMultipart("alternative")
+        message["Subject"] = subject
+        message["From"] = f"{SENDER_NAME} <{SENDER_EMAIL}>"
+        message["To"] = ", ".join(recipients)
+        
+        # Attach HTML
+        html_part = MIMEText(html_content, "html", "utf-8")
+        message.attach(html_part)
+        
+        # Send via SMTP
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_LOGIN, SMTP_PASSWORD)
+            server.sendmail(SENDER_EMAIL, recipients, message.as_string())
+        
+        print(f"✅ Email sent successfully!")
+        return True
+        
+    except Exception as e:
+        print(f"❌ SMTP Error: {e}")
+        return False
+    ```
+
+---
+
+## ⚙️ Configuration
+
+### **Create `.env` File**
+
+```
+
+
+# ============================================
+
+# BREVO SMTP CONFIGURATION (Required)
+
+# ============================================
+
+BREVO_LOGIN=your-email@example.com
+BREVO_SMTP_KEY=your-smtp-key-here
+
+# Sender Information (must be verified in Brevo)
+
+SENDER_EMAIL=newsletter@yourdomain.com
+SENDER_NAME=CSE(AI\&ML) Newsletter
+
+# Recipients (comma-separated, max 300/day on free tier)
+
+RECIPIENT_EMAILS=student1@example.com,student2@example.com,student3@example.com
+
+# ============================================
+
+# API KEYS (Required)
+
+# ============================================
+
+TAVILY_API_KEY=tvly-your-key-here
+GROQ_API_KEY=gsk_your-key-here
+
+# ============================================
+
+# DATABASE (Required)
+
+# ============================================
+
+DATABASE_URL=postgresql://username:password@localhost:5432/newsletter_db
+
+# ============================================
+
+# NEWSLETTER SETTINGS
+
+# ============================================
+
+SEND_EMAIL=true
+RECIPIENT_NAME=Student
+
+# Optional URLs
+
+FEEDBACK_URL=https://yourdomain.com/feedback
+UNSUBSCRIBE_URL=https://yourdomain.com/unsubscribe
+PREFERENCES_URL=https://yourdomain.com/preferences
+ARCHIVE_URL=https://yourdomain.com/archive
+
+```
+
+### **Database Setup**
+
+```
+
+-- Create database
+CREATE DATABASE newsletter_db;
+
+-- Create user
+CREATE USER newsletter_user WITH PASSWORD 'your_password';
+
+-- Grant privileges
+GRANT ALL PRIVILEGES ON DATABASE newsletter_db TO newsletter_user;
+
+```
+
+Initialize tables:
+```
+
+python -m newsletter.database
+
+```
+
+---
+
+## 🚀 Usage
+
+### **Run Full Pipeline**
+
+```
+
+python -m newsletter.pipeline
+
+```
+
+### **Expected Output**
+
+```
+
+🔎 DEEP SEARCH MODE - Comprehensive Content Discovery
+================================================================================
+⏱️  Expected time: 60-90 seconds
+📊 Searching 10 results per category
+
+🔍 Deep searching: latest AI breakthroughs...
+✅ Found 10 results, 15 images in 8.2s
+
+[... more searches ...]
+
+📊 DEEP SEARCH COMPLETE
+================================================================================
+Latest Developments: 📰 (347 words)
+AI Training: 🎥 (156 words)
+AI Research: 📰 (289 words)
+AI Startups: 📰 (201 words)
+Trending Tools: 4 tools
+📈 Total: 4 articles (1 videos)
+
+[3/7] Generating category-specific summaries...
+🤖 Generating development summary...
+✅ Generated 47 word summary
+
+[7/7] Email delivery...
+📧 Sending to 3 recipients via Brevo SMTP...
+✅ Email sent successfully!
+
+✅ NEWSLETTER COMPLETED!
+
+```
+
+### **Test Email Sending**
+
+Create `test_email.py`:
+
+```
+
+from newsletter.emailer import send_email
+
+html = """
+
+<html>
+<body style="font-family: Arial; padding: 20px;">
+    ```
+    <h1 style="color: #667eea;">🧪 Test Newsletter</h1>
+    ```
+    <p>This is a test from your newsletter system!</p>
+</body>
+</html>
+"""
+
+recipients = ["your-email@example.com"]
+send_email(html, "Test Newsletter", recipients)
+
+```
+
+Run:
+```
+
+python test_email.py
+
+```
 
 ---
 
@@ -94,463 +467,218 @@ The **CSE(AI&ML) Newsletter Automation System** is a fully automated pipeline th
 ```
 
 ai-newsletter/
-│
 ├── newsletter/
 │   ├── __init__.py
-│   ├── fetcher.py          \# Tavily API integration \& content fetching
-│   ├── summarizer.py       \# Groq LLM summarization
-│   ├── database.py         \# SQLite database operations
-│   ├── templates.py        \# Jinja2 template rendering
-│   ├── emailer.py          \# Email delivery (multi-provider)
-│   └── pipeline.py         \# Main automation pipeline
-│
+│   ├── pipeline.py          \# Main orchestration
+│   ├── fetcher.py            \# Deep search (v4.0)
+│   ├── summarizer.py         \# AI summaries (v4.0)
+│   ├── emailer.py            \# Brevo SMTP (NEW)
+│   ├── database.py           \# PostgreSQL
+│   ├── templates.py          \# Template renderer
+│   └── output/
+│       └── newsletter_*.html
 ├── templates/
-│   └── newsletter.html     \# Professional HTML newsletter template
-│
-├── newsletter/output/      \# Generated newsletters (HTML files)
-│
-├── .env                    \# Environment variables (not committed)
-├── .gitignore
-├── requirements.txt        \# Python dependencies
+│   └── newsletter.html       \# Jinja2 template (v4.0)
+├── .env                      \# Configuration
+├── requirements.txt
 ├── README.md
-└── LICENSE
+└── test_email.py            \# Email testing
 
 ```
 
 ---
 
-## 📋 Prerequisites
+## 📊 Sending Limits
 
-- Python 3.10 or higher
-- pip package manager
-- Virtual environment (recommended)
-- API Keys (see [Configuration](#-configuration))
+### **Brevo Free Tier:**
+
+| Plan | Emails/Day | Emails/Month | Cost | Best For |
+|------|------------|--------------|------|----------|
+| **Free** | **300** | ~9,000 | $0 | **Demo, Testing** |
+| **Starter** | ~667 | 20,000 | $25/mo | 100-600 students |
+| **Business** | ~667 | 20,000 | $65/mo | Advanced features |
+
+### **Recipient Calculations:**
+
+```
+
+
+# Demo (5-50 recipients) - FREE TIER ✅
+
+RECIPIENT_EMAILS=s1@ex.com,s2@ex.com,s3@ex.com  \# 3 recipients
+
+# Small class (100 students) - FREE TIER ✅
+
+# Send once/week = 100 emails/week (well within 300/day)
+
+# Medium class (300 students) - FREE TIER ✅
+
+# Send once/week = 300 emails (exactly at limit)
+
+# Large class (600 students) - STARTER PLAN (\$25/mo) 📈
+
+# Need 600 emails/week = need paid plan
+
+```
+
+### **Best Practices:**
+
+1. **Start with free tier** for demo/testing
+2. **Verify all sender emails** in Brevo dashboard
+3. **Monitor daily limits** in Brevo analytics
+4. **Upgrade when needed** (600+ recipients)
 
 ---
 
-## ⚙️ Installation
+## 🎨 Customization
 
-### 1. Clone the Repository
+### **Modify Search Queries**
 
-```
-
-git clone https://github.com/AdityaMallela041/ai-newsletter.git
-cd ai-newsletter
+Edit `newsletter/fetcher.py` (lines 45-60):
 
 ```
 
-### 2. Create Virtual Environment
-
-```
-
-
-# Windows
-
-python -m venv venv
-venv\Scripts\activate
-
-# Linux/Mac
-
-python3 -m venv venv
-source venv/bin/activate
-
-```
-
-### 3. Install Dependencies
-
-```
-
-pip install -r requirements.txt
-
-```
-
-### 4. Set Up Environment Variables
-
-Create a `.env` file in the project root:
-
-```
-
-cp .env.example .env  \# If example exists
-
-# OR create manually:
-
-touch .env
-
-```
-
----
-
-## 🔑 Configuration
-
-### Required API Keys
-
-Add these to your `.env` file:
-
-```
-
-
-# === API Keys ===
-
-TAVILY_API_KEY=tvly-xxxxxxxxxxxxxxxxx
-GROQ_API_KEY=gsk-xxxxxxxxxxxxxxxxx
-
-# === Email Configuration (Choose ONE) ===
-
-# Option 1: College SMTP (Recommended - Ask IT Department)
-
-SMTP_SERVER=smtp.vbithyd.ac.in
-SMTP_PORT=587
-SMTP_USERNAME=aiml@vbithyd.ac.in
-SMTP_PASSWORD=your_password
-SENDER_EMAIL=aiml@vbithyd.ac.in
-RECIPIENT_EMAILS=cse@vbit.ac.in,ece@vbit.ac.in,eee@vbit.ac.in
-
-# Option 2: Gmail SMTP (500 emails/day free)
-
-# SMTP_SERVER=smtp.gmail.com
-
-# SMTP_PORT=587
-
-# SMTP_USERNAME=your_email@gmail.com
-
-# SMTP_PASSWORD=your_app_password  \# Generate at myaccount.google.com/apppasswords
-
-# SENDER_EMAIL=your_email@gmail.com
-
-# RECIPIENT_EMAILS=recipient1@example.com,recipient2@example.com
-
-# Option 3: SendGrid (100 emails/day free)
-
-# SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxx
-
-# SENDER_EMAIL=verified@yourdomain.com
-
-# RECIPIENT_EMAILS=recipient1@example.com,recipient2@example.com
-
-# === Control Flags ===
-
-SEND_EMAIL=false  \# Set to 'true' for production
-EMAIL_PROVIDER=smtp  \# smtp, gmail, or sendgrid
-
-# === Optional Settings ===
-
-RECIPIENT_NAME=Student
-FEEDBACK_URL=https://forms.google.com/your-form
-UNSUBSCRIBE_URL=https://yourdomain.com/unsubscribe
-PREFERENCES_URL=https://yourdomain.com/preferences
-ARCHIVE_URL=https://yourdomain.com/archive
-
-```
-
-### Getting API Keys
-
-1. **Tavily API** (Content Fetching)
-   - Sign up: https://tavily.com
-   - Free tier: 1,000 searches/month
-   - Get API key from dashboard
-
-2. **Groq API** (AI Summarization)
-   - Sign up: https://console.groq.com
-   - Free tier: 14,400 requests/day
-   - Generate API key
-
-3. **Email Provider** (Choose one)
-   - **College SMTP**: Contact IT department
-   - **Gmail**: Enable 2FA, generate App Password
-   - **SendGrid**: Free 100 emails/day
-   - **Brevo**: Free 300 emails/day
-
----
-
-## 🚀 Usage
-
-### Testing Mode (No Emails Sent)
-
-```
-
-
-# Ensure SEND_EMAIL=false in .env
-
-python -m newsletter.pipeline
-
-```
-
-**Output:**
-- ✅ Fetches latest AI/ML content
-- ✅ Generates summaries
-- ✅ Saves to database
-- ✅ Creates HTML file in `newsletter/output/`
-- ⚠️ **Does NOT send emails**
-
-### Production Mode (Sends Emails)
-
-```
-
-
-# Set SEND_EMAIL=true in .env
-
-python -m newsletter.pipeline
-
-```
-
-**What Happens:**
-1. Fetches 17+ articles across 5 categories
-2. Summarizes using Groq LLaMA 3
-3. Renders professional HTML template
-4. Sends to all recipients
-5. Logs delivery status to database
-
----
-
-## 📅 Automated Scheduling
-
-### Option 1: CRON (Linux/Mac)
-
-```
-
-
-# Edit crontab
-
-crontab -e
-
-# Add this line (runs every Friday at 4 PM IST)
-
-0 16 * * FRI /path/to/venv/bin/python -m newsletter.pipeline
-
-```
-
-### Option 2: Windows Task Scheduler
-
-1. Open Task Scheduler
-2. Create Basic Task
-3. Trigger: Weekly, Friday, 4:00 PM
-4. Action: Start a Program
-   - Program: `C:\path\to\venv\Scripts\python.exe`
-   - Arguments: `-m newsletter.pipeline`
-   - Start in: `C:\path\to\ai-newsletter`
-
----
-
-## 📊 Database Schema
-
-The system uses SQLite with 4 tables:
-
-```
-
--- Articles table
-articles (
-id, title, url, summary, content, image, video_id,
-source, published_date, category, score, created_at
-)
-
--- Newsletters table
-newsletters (
-id, sent_date, subject, total_articles, status
-)
-
--- User views tracking
-newsletter_views (
-id, newsletter_id, user_email, viewed_at
-)
-
--- User ratings
-newsletter_ratings (
-id, newsletter_id, user_email, rating, feedback, rated_at
+developments_results, dev_images, dev_answer = search(
+"YOUR CUSTOM QUERY HERE",
+max_results=10
 )
 
 ```
 
----
+### **Change Summary Style**
 
-## 🎨 Newsletter Preview
-
-The generated newsletter includes:
-
-- **Header**: Purple gradient with branding
-- **Summary Box**: Article count and breakdown
-- **5 Content Sections**: Developments, Training, Research, Tools, Startups
-- **Rich Media**: Images (16:9), YouTube embeds, infographics
-- **Metadata**: Source badges, publish dates, read-more links
-- **Engagement**: Star rating system, feedback button
-- **Footer**: Department branding, unsubscribe links
-
----
-
-## 🧪 Testing
-
-### Test Individual Components
+Edit `newsletter/summarizer.py` (lines 20-50):
 
 ```
 
-
-# Test content fetching
-
-python -c "from newsletter.fetcher import fetch_articles; print(fetch_articles())"
-
-# Test summarization
-
-python -c "from newsletter.summarizer import summarize_with_groq; print(summarize_with_groq('AI text here', 'development'))"
-
-# Test email (without sending)
-
-# Set SEND_EMAIL=false in .env first
-
-python -m newsletter.pipeline
+prompts = {
+"development": "YOUR CUSTOM PROMPT HERE",
+\# ... other categories
+}
 
 ```
 
-### View Generated Newsletter
+### **Update Email Template**
 
-```
+Edit `templates/newsletter.html`:
 
-
-# Open latest generated file in browser
-
-cd newsletter/output
-
-# Double-click the newest .html file
-
-```
+- **Colors:** Search for `#667eea` (primary color)
+- **Spacing:** Adjust `padding` values
+- **Fonts:** Change `font-family`
 
 ---
 
-## 🔧 Troubleshooting
+## 🐛 Troubleshooting
 
-### Common Issues
+### **Email Issues**
 
-**Issue**: No images displaying
-- **Fix**: Check Tavily API quota, verify image URLs
+| Issue | Solution |
+|-------|----------|
+| "Authentication failed" | Check `BREVO_LOGIN` and `BREVO_SMTP_KEY` in `.env` |
+| "Sender not verified" | Verify sender email in Brevo dashboard |
+| "Daily limit exceeded" | You've sent 300 emails today. Wait 24h or upgrade |
+| "Emails in spam" | Set up SPF/DKIM in Brevo → Senders & IP → Authentication |
 
-**Issue**: Groq API timeout
-- **Fix**: Reduce max_tokens or use fallback LLM
+### **Content Issues**
 
-**Issue**: Email not sending
-- **Fix**: Verify SMTP credentials, check firewall
+| Issue | Solution |
+|-------|----------|
+| "No content fetched" | Check `TAVILY_API_KEY` is valid |
+| "Summary too short" | Content insufficient, using fallback excerpt |
+| "No images" | Using placeholder images (normal) |
 
-**Issue**: Database locked
-- **Fix**: Close other processes accessing `articles.db`
-
-### Debug Mode
-
-Add to `pipeline.py`:
+### **Database Issues**
 
 ```
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
+
+# Check PostgreSQL is running
+
+sudo systemctl status postgresql
+
+# Start PostgreSQL
+
+sudo systemctl start postgresql
+
+# Test connection
+
+psql -U newsletter_user -d newsletter_db
 
 ```
 
 ---
 
-## 📈 Future Enhancements
+## 📈 Performance Metrics
 
-- [ ] Web dashboard for newsletter preview
-- [ ] Multi-language support
-- [ ] PDF export functionality
-- [ ] Custom content filtering
-- [ ] Email open/click tracking
-- [ ] RSS feed integration
-- [ ] Slack/Teams integration
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+| Metric | Value |
+|--------|-------|
+| **Deep Search Time** | 60-90 seconds |
+| **Summary Generation** | 2-3 seconds per article |
+| **Total Pipeline** | ~90-120 seconds |
+| **Email Delivery** | 99%+ success rate |
+| **Search Results** | 10 per category |
+| **Content Quality** | 30+ words guaranteed |
 
 ---
 
-## 📝 License
+## 🔐 Security
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- ✅ Never commit `.env` to Git
+- ✅ Use environment variables for secrets
+- ✅ Rotate API keys monthly
+- ✅ Enable Brevo two-factor authentication
+- ✅ Use separate database user
+- ✅ Validate external inputs
 
 ---
 
-## 👨‍💻 Author
+## 📝 Changelog
 
-**Aditya Mallela**  
-Department of Computer Science & Engineering (AI & ML)  
-VNR Vignana Jyothi Institute of Engineering and Technology
+### **v4.0 (October 2025)**
+- ✨ **Brevo SMTP integration** (replaced SendGrid)
+- ✨ Deep search with 10 results/category
+- ✨ Structured AI summaries with bullets
+- ✨ Interactive color-coded star rating
+- ✨ Enhanced newsletter design
+- 🐛 Fixed bullet alignment
+- 🐛 Removed gradient from feedback
+- 🐛 Fixed thumbnail/content matching
 
-- GitHub: [@AdityaMallela041](https://github.com/AdityaMallela041)
-- Email: 22p61a6697@vbithyd.ac.in
+---
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file
+
+---
+
+## 👥 Contact
+
+**Department of CSE (AI & ML)**  
+📧 Email: newsletter@yourdomain.com  
+🌐 Website: https://yourdomain.com  
+💬 Issues: [GitHub Issues](https://github.com/your-username/ai-newsletter/issues)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- [Tavily](https://tavily.com) - AI-powered search API
+- [Brevo](https://www.brevo.com) - SMTP email delivery
+- [Tavily](https://tavily.com) - Deep web search API
 - [Groq](https://groq.com) - Fast LLM inference
-- [The Rundown AI](https://therundown.ai) - Newsletter design inspiration
-- Department of CSE(AI&ML) - Project support
-
----
-
-## 📞 Support
-
-For issues or questions:
-
-1. **Open an Issue**: [GitHub Issues](https://github.com/AdityaMallela041/ai-newsletter/issues)
-2. **Email**: 22p61a6697@vbithyd.ac.in
-3. **Documentation**: Check this README
+- [PostgreSQL](https://www.postgresql.org/) - Database
+- [Jinja2](https://jinja.palletsprojects.com/) - Templates
 
 ---
 
 <div align="center">
 
-**⭐ Star this repo if you find it useful!**
+**Made with ❤️ by CSE(AI&ML) Department**
 
-Made with ❤️ by the CSE(AI&ML) Department
+⭐ **Star this repo if you find it helpful!**
+
+📧 **Free tier: 300 emails/day** | 🚀 **Perfect for demos & small classes**
 
 </div>
-```
 
 
-***
-
-## **Additional Files to Add**
-
-### **1. `.env.example`**
-
-```env
-# API Keys
-TAVILY_API_KEY=your_tavily_api_key_here
-GROQ_API_KEY=your_groq_api_key_here
-
-# Email Configuration (SMTP)
-SMTP_SERVER=smtp.example.com
-SMTP_PORT=587
-SMTP_USERNAME=your_email@example.com
-SMTP_PASSWORD=your_password
-SENDER_EMAIL=newsletter@example.com
-RECIPIENT_EMAILS=recipient1@example.com,recipient2@example.com
-
-# Control
-SEND_EMAIL=false
-EMAIL_PROVIDER=smtp
-
-# Optional
-RECIPIENT_NAME=Student
-FEEDBACK_URL=#
-UNSUBSCRIBE_URL=#
-PREFERENCES_URL=#
-ARCHIVE_URL=#
-```
-
-
-### **2. `LICENSE` (MIT License)**
-
-```
-MIT License
-
-Copyright (c) 2025 Aditya Mallela
-
-Permission is hereby granted, free of charge, to any person obtaining a copy...
-(Full MIT license text)
