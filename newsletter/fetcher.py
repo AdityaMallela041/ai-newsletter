@@ -41,14 +41,14 @@ def fetch_articles():
     # 🎯 CURATED SEARCH QUERIES - GENAI, LLMS, AGENTS, DL
     # =====================================================
     
-    # 1. LATEST DEVELOPMENTS - Focus on GenAI breakthroughs, LLM innovations, AI Agents
+    # 1. LATEST DEVELOPMENTS
     developments_results, dev_images = search(
         "latest generative AI breakthroughs LLM GPT-4 Claude Gemini multimodal models "
         "AI agents autonomous systems RAG vector databases 2025 announcements releases",
         max_results=5
     )
     
-    # 2. TRAINING & COURSES - Advanced LLM, Agent development, Deep Learning courses
+    # 2. TRAINING & COURSES
     training_results, train_images = search(
         "youtube.com advanced large language model training LLM fine-tuning "
         "AI agent development reinforcement learning from human feedback RLHF "
@@ -56,7 +56,7 @@ def fetch_articles():
         max_results=5
     )
     
-    # 3. RESEARCH PAPERS - Cutting-edge arXiv papers on LLMs, Agents, GenAI
+    # 3. RESEARCH PAPERS
     research_results, research_images = search(
         "arxiv.org latest research papers large language models LLM transformers "
         "multi-agent systems chain-of-thought reasoning prompt engineering "
@@ -64,10 +64,10 @@ def fetch_articles():
         max_results=5
     )
     
-    # 4. STARTUPS & TOOLS - GenAI platforms, LLM APIs, Agent frameworks
+    # 4. STARTUPS & TOOLS
     startups_results, startups_images = search(
         "new generative AI startups LLM API platforms AI agent frameworks "
-        "vector databases AutoGPT LangChain OpenAI alternatives founded 2025",
+        "vector databases AutoGPT LangChain OpenAI Anthropic Cohere founded 2025",
         max_results=5
     )
     
@@ -104,20 +104,16 @@ def fetch_articles():
     
     def get_high_quality_image(res, image_pool, article_type, index=0):
         """Get UNIQUE image per article"""
-        # Try article's own image
         if res.get("image"):
             return res["image"]
         
-        # Try image pool with index
         if image_pool and len(image_pool) > index:
             return image_pool[index]
         
-        # Try YouTube thumbnail
         video_id = extract_video_id(res.get("url", ""))
         if video_id:
             return f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg"
         
-        # UNIQUE Unsplash image per category with GenAI focus
         keywords = {
             "development": "artificial+intelligence+neural+network",
             "training": "machine+learning+programming",
@@ -125,7 +121,6 @@ def fetch_articles():
             "startup": "innovation+technology+startup"
         }
         
-        # Use hash of article title for uniqueness
         import time
         seed = hash(res.get("title", "")) + int(time.time() * 1000)
         keyword = keywords.get(article_type, "technology")
@@ -133,21 +128,14 @@ def fetch_articles():
     
     
     def is_quality_content(res, category):
-        """
-        Filter for CURATED, HIGH-QUALITY content
-        - Must be recent (2024-2025)
-        - Must contain relevant keywords
-        - Must have substantial content
-        """
+        """Filter for CURATED, HIGH-QUALITY content"""
         title = (res.get("title") or "").lower()
         content = (res.get("content") or res.get("snippet") or "").lower()
         full_text = title + " " + content
         
-        # Minimum content length
         if len(content.split()) < 20:
             return False
         
-        # Category-specific quality filters
         quality_keywords = {
             "development": [
                 "gpt", "llm", "large language model", "generative ai", "genai",
@@ -167,15 +155,13 @@ def fetch_articles():
             "startup": [
                 "startup", "founded", "launch", "platform", "api", "tool",
                 "llm", "genai", "agent", "vector database", "ai platform",
-                "openai", "anthropic", "cohere", "framework"
+                "openai", "anthropic", "cohere", "framework", "company"
             ]
         }
         
-        # Check if content contains quality keywords
         keywords = quality_keywords.get(category, [])
         matches = sum(1 for keyword in keywords if keyword in full_text)
         
-        # Require at least 2 keyword matches
         return matches >= 2
     
     
@@ -187,17 +173,12 @@ def fetch_articles():
         url_val = res.get("url", "#")
         content_val = res.get("content") or res.get("snippet") or res.get("title") or ""
         
-        # Quality check
         if not is_quality_content(res, article_type):
             return None
         
-        # Get UNIQUE image
         image = get_high_quality_image(res, image_pool, article_type, index)
-        
-        # Check if it's a YouTube video
         video_id = extract_video_id(url_val)
         
-        # Extract published date
         published_date = res.get("published_date")
         if not published_date:
             published_date = datetime.now().strftime("%b %d, %Y")
@@ -224,14 +205,10 @@ def fetch_articles():
     
     
     def get_best_article(results, images, category):
-        """
-        Pick BEST, MOST RELEVANT article
-        Priority: Quality > Relevance > Videos > Score
-        """
+        """Pick BEST, MOST RELEVANT article"""
         if not results:
             return None
         
-        # Filter for quality content
         quality_results = []
         for idx, res in enumerate(results):
             article = format_article(res, category, images, idx)
@@ -241,16 +218,13 @@ def fetch_articles():
         if not quality_results:
             return None
         
-        # Priority 1: Find YouTube video with high score
         video_articles = [(a, s) for a, s in quality_results if a.get("video_id")]
         if video_articles:
             return max(video_articles, key=lambda x: x[1])[0]
         
-        # Priority 2: Highest score article
         return max(quality_results, key=lambda x: x[1])[0]
     
     
-    # Get single BEST article from each category
     development = get_best_article(developments_results, dev_images, "development")
     training = get_best_article(training_results, train_images, "training")
     research = get_best_article(research_results, research_images, "research")
@@ -259,7 +233,6 @@ def fetch_articles():
     # Fetch trending GenAI tools
     trending_tools = fetch_trending_genai_tools()
     
-    # Count totals
     articles = [development, training, research, startup]
     total = sum(1 for a in articles if a)
     videos = sum(1 for a in articles if a and a.get("video_id"))
@@ -277,46 +250,106 @@ def fetch_articles():
         "training": training,
         "research": research,
         "startup": startup,
-        "trending_tools": trending_tools,
+        "tools": trending_tools,
         "total_articles": total,
         "video_count": videos,
     }
 
 
 def fetch_trending_genai_tools():
-    """Fetch CURATED trending GenAI/LLM tools and platforms"""
+    """Fetch CURATED trending GenAI/LLM tools with CLEAN descriptions"""
+    
+    # FALLBACK: Curated list of top GenAI tools with clean descriptions
+    curated_tools = [
+        {
+            "name": "LangChain",
+            "description": "Framework for developing applications powered by language models. Build LLM apps with chains, agents, and memory components.",
+            "link": "https://langchain.com"
+        },
+        {
+            "name": "Pinecone",
+            "description": "Vector database for AI applications. Store and retrieve embeddings at scale for semantic search and RAG systems.",
+            "link": "https://pinecone.io"
+        },
+        {
+            "name": "AutoGPT",
+            "description": "Autonomous AI agents that can execute complex tasks with minimal human input using GPT-4 and chain-of-thought reasoning.",
+            "link": "https://github.com/Significant-Gravitas/AutoGPT"
+        },
+        {
+            "name": "LlamaIndex",
+            "description": "Data framework for LLM applications. Connect custom data sources to large language models with ease.",
+            "link": "https://llamaindex.ai"
+        }
+    ]
+    
+    # Try to fetch from API, but use curated list as fallback
     url = "https://api.tavily.com/search"
     headers = {"Content-Type": "application/json"}
     
     payload = {
         "api_key": os.getenv("TAVILY_API_KEY"),
-        "query": "trending generative AI tools LLM platforms agent frameworks "
-                 "LangChain AutoGPT vector databases Pinecone Weaviate Chroma "
-                 "OpenAI API alternatives 2025",
-        "search_depth": "advanced",
-        "max_results": 5,
+        "query": "LangChain Pinecone vector database LlamaIndex AI agent frameworks 2025",
+        "search_depth": "basic",
+        "max_results": 6,
         "include_images": False,
     }
     
     try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=30)
+        resp = requests.post(url, headers=headers, json=payload, timeout=20)
         resp.raise_for_status()
         result = resp.json()
         results = result.get("results", [])
         
-        tools_list = []
-        for res in results[:4]:
-            content = res.get("content") or res.get("snippet") or ""
-            # Filter for actual tools/platforms
-            if any(keyword in content.lower() for keyword in ["tool", "platform", "framework", "api", "library", "sdk"]):
-                tools_list.append({
-                    "name": res.get("title", "GenAI Tool"),
-                    "description": content[:150] + "..." if len(content) > 150 else content,
-                    "link": res.get("url", "#")
-                })
+        if not results:
+            return curated_tools
         
-        return tools_list[:4]  # Top 4 tools
+        tools_list = []
+        seen_names = set()
+        
+        # Known GenAI tools for matching
+        known_tools = ["langchain", "pinecone", "autogpt", "llamaindex", "weaviate", 
+                      "chroma", "milvus", "qdrant", "haystack", "semantic kernel"]
+        
+        for res in results:
+            title = res.get("title", "").lower()
+            content = (res.get("content") or res.get("snippet") or "").lower()
+            url_link = res.get("url", "#")
+            
+            # Check if it's a known tool
+            tool_found = None
+            for known in known_tools:
+                if known in title or known in url_link.lower():
+                    tool_found = known.title().replace("gpt", "GPT")
+                    break
+            
+            if not tool_found:
+                continue
+            
+            if tool_found.lower() in seen_names:
+                continue
+            
+            # Clean description - remove URLs, markdown, etc.
+            clean_content = content.replace("[", "").replace("]", "").replace("(https://", "")
+            sentences = clean_content.split(".")
+            description = sentences[0][:120] + "..." if len(sentences[0]) > 120 else sentences[0] + "."
+            
+            tools_list.append({
+                "name": tool_found,
+                "description": description.strip(),
+                "link": url_link
+            })
+            seen_names.add(tool_found.lower())
+            
+            if len(tools_list) >= 4:
+                break
+        
+        # Return curated list if API results are poor
+        if len(tools_list) < 2:
+            return curated_tools
+        
+        return tools_list
     
     except Exception as e:
-        print(f"❌ Error fetching GenAI tools: {e}")
-        return []
+        print(f"❌ Error fetching tools, using curated list: {e}")
+        return curated_tools

@@ -3,198 +3,378 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VBIT AI & ML Newsletter</title>
-    <link rel="stylesheet" href="newsletter.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>{{ newsletter_title }}</title>
 </head>
-<body>
-    <div class="email-container">
+<body style="margin: 0; padding: 30px 15px; font-family: 'Roboto', Arial, sans-serif; background: linear-gradient(135deg, #E0F2FE 0%, #FEF3C7 50%, #FEE2E2 100%); line-height: 1.6; color: #111827;">
+    
+    <!-- Main Email Container (800px max width) -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,43,91,0.12);">
         
-        <!-- VBIT HEADER -->
-        <div class="vbit-header">
-            <div class="logo-wrapper">
-                <img src="C:\Users\ADITYA MALLELA\Desktop\ai-newsletter\newsletter\templates\assets\logo2.jpg" alt="VBIT Logo" class="vbit-logo">
-            </div>
-        </div>
-
-        <!-- NEWSLETTER TITLE BANNER -->
-        <div class="newsletter-banner">
-            <div class="banner-icon"></div>
-            <h2 class="banner-title">AI & ML WEEKLY NEWSLETTER</h2>
-            <p class="banner-date">{{ current_date }}</p>
-        </div>
-
-        <!-- GREETING -->
-        <div class="content-section greeting-section">
-            <h3 class="section-greeting">Good {{ time_of_day }}, {{ recipient_name }}! </h3>
-            <p class="intro-text">
-                This week in AI & Machine Learning: From breakthrough research to cutting-edge tools, 
-                here's everything you need to know to stay ahead in the rapidly evolving AI landscape.
-            </p>
-
-            <div class="edition-box">
-                <div class="box-icon">📰</div>
-                <h4 class="box-title">IN TODAY'S EDITION:</h4>
-                <ul class="edition-list">
-                    {% if development %}<li>{{ development.title }}</li>{% endif %}
-                    {% if training %}<li>{{ training.title }}</li>{% endif %}
-                    {% if research %}<li>{{ research.title }}</li>{% endif %}
-                    {% if startup %}<li>{{ startup.title }}</li>{% endif %}
-                </ul>
-            </div>
-        </div>
-
+        <!-- VBIT Header with Logo -->
+        <tr>
+            <td style="background: transparent; padding: 0; text-align: center; border-bottom: 4px solid #F97316;">
+                <img src=https://i.imgur.com/O6EHWkc.jpeg alt="VBIT Logo" style="width: 100%; max-width: 100%; height: auto; display: block;">
+            </td>
+        </tr>
+        
+        <!-- Newsletter Banner -->
+        <tr>
+            <td style="background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); padding: 25px 40px; text-align: center; border-bottom: 3px solid #002B5B;">
+                <p style="font-size: 36px; margin: 0 0 8px 0;">📰</p>
+                <h1 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 900; color: white; margin: 8px 0; letter-spacing: 1.5px; text-transform: uppercase;">{{ newsletter_title }}</h1>
+                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.95); margin: 8px 0 0 0;">{{ current_date }}</p>
+            </td>
+        </tr>
+        
+        <!-- Greeting Section -->
+        <tr>
+            <td style="padding: 35px 40px 30px 40px;">
+                <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 22px; font-weight: 700; color: #002B5B; margin: 0 0 12px 0;">Good {{ time_of_day }}, {{ recipient_name }}!</h2>
+                <p style="font-size: 15px; color: #4B5563; line-height: 1.6; margin: 0 0 25px 0;">
+                    This week in AI & Machine Learning: From breakthrough research to cutting-edge tools, here's everything you need to know to stay ahead in the rapidly evolving AI landscape.
+                </p>
+                
+                <!-- Today's Edition Box -->
+                <table width="100%" cellpadding="25" cellspacing="0" border="0" style="background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); border-left: 4px solid #F97316; border-radius: 8px;">
+                    <tr>
+                        <td>
+                            <p style="font-size: 32px; margin: 0 0 10px 0;">📋</p>
+                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; color: #F97316; margin: 0 0 15px 0; letter-spacing: 1.2px;">IN TODAY'S EDITION:</p>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                {% if development %}<li style="font-size: 14px; color: #111827; margin-bottom: 8px; padding-left: 20px; position: relative; font-weight: 500;"><span style="position: absolute; left: 0; color: #F97316; font-size: 18px; font-weight: 900;">▸</span>{{ development.title }}</li>{% endif %}
+                                {% if training %}<li style="font-size: 14px; color: #111827; margin-bottom: 8px; padding-left: 20px; position: relative; font-weight: 500;"><span style="position: absolute; left: 0; color: #F97316; font-size: 18px; font-weight: 900;">▸</span>{{ training.title }}</li>{% endif %}
+                                {% if research %}<li style="font-size: 14px; color: #111827; margin-bottom: 8px; padding-left: 20px; position: relative; font-weight: 500;"><span style="position: absolute; left: 0; color: #F97316; font-size: 18px; font-weight: 900;">▸</span>{{ research.title }}</li>{% endif %}
+                                {% if startup %}<li style="font-size: 14px; color: #111827; margin-bottom: 8px; padding-left: 20px; position: relative; font-weight: 500;"><span style="position: absolute; left: 0; color: #F97316; font-size: 18px; font-weight: 900;">▸</span>{{ startup.title }}</li>{% endif %}
+                                {% if tools and tools|length > 0 %}<li style="font-size: 14px; color: #111827; margin-bottom: 8px; padding-left: 20px; position: relative; font-weight: 500;"><span style="position: absolute; left: 0; color: #F97316; font-size: 18px; font-weight: 900;">▸</span>Trending GenAI Tools: {{ tools|length }} Essential Frameworks</li>{% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
         <!-- LATEST DEVELOPMENTS -->
         {% if development %}
-        <div class="section-header header-red">
-            <span class="header-icon">🚀</span>
-            <h3 class="header-title">LATEST DEVELOPMENTS</h3>
-        </div>
-
-        <div class="content-section">
-            <div class="article-card">
-                {% if development.image %}
-                <div class="article-image-wrapper">
-                    <img src="{{ development.image }}" alt="{{ development.title }}" class="article-image">
-                </div>
-                {% endif %}
+        <tr>
+            <td style="padding: 0 40px 30px 40px;">
+                <!-- Section Header -->
+                <table width="100%" cellpadding="16" cellspacing="0" border="0" style="background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%); margin-top: 25px;">
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">🚀</span>
+                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; margin: 0; color: white;">LATEST DEVELOPMENTS</h3>
+                        </td>
+                    </tr>
+                </table>
                 
-                <div class="article-body">
-                    <span class="article-badge badge-red">CRESCENDO</span>
-                    <h4 class="article-title">{{ development.title }}</h4>
-                    <p class="article-text">{{ development.summary }}</p>
-                    <div class="article-meta">
-                        <span class="meta-date">Oct 16, 2025</span>
-                        <a href="{{ development.url }}" class="meta-link">Read more →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <!-- Article Card -->
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,43,91,0.06); border: 2px solid #F3F4F6; margin-top: 15px;">
+                    {% if development.image %}
+                    <tr>
+                        <td style="width: 100%; height: 350px; overflow: hidden; background: #F3F4F6;">
+                            <img src="{{ development.image }}" alt="{{ development.title }}" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td style="padding: 28px;">
+                            <span style="display: inline-block; color: white; font-family: 'Lato', Arial, sans-serif; font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 6px 14px; border-radius: 50px; margin-bottom: 15px; letter-spacing: 1px; background: #DC2626;">{{ development.source }}</span>
+                            <h4 style="font-family: 'Lato', Arial, sans-serif; font-size: 22px; font-weight: 900; color: #111827; margin: 0 0 15px 0; line-height: 1.3;">{{ development.title }}</h4>
+                            <p style="font-size: 15px; color: #4B5563; line-height: 1.6; margin: 0 0 18px 0;">{{ development.summary }}</p>
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="border-top: 2px solid #F3F4F6;">
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span style="font-family: 'Lato', Arial, sans-serif; font-size: 13px; font-weight: 700; color: #9CA3AF;">{{ development.published_date }}</span>
+                                    </td>
+                                    <td style="width: 50%; text-align: right;">
+                                        <a href="{{ development.url }}" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 900; color: #F97316; text-decoration: none;">Read more →</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
         {% endif %}
-
-        <!-- AI TRAINING -->
+        
+        <!-- AI TRAINING & COURSES -->
         {% if training %}
-        <div class="section-header header-blue">
-            <span class="header-icon">🎓</span>
-            <h3 class="header-title">AI TRAINING & COURSES</h3>
-        </div>
-
-        <div class="content-section">
-            <div class="article-card">
-                {% if training.video_id %}
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/{{ training.video_id }}" frameborder="0" allowfullscreen class="video-embed"></iframe>
-                </div>
-                {% elif training.image %}
-                <div class="article-image-wrapper">
-                    <img src="{{ training.image }}" alt="{{ training.title }}" class="article-image">
-                </div>
-                {% endif %}
+        <tr>
+            <td style="padding: 0 40px 30px 40px;">
+                <table width="100%" cellpadding="16" cellspacing="0" border="0" style="background: linear-gradient(135deg, #002B5B 0%, #004080 100%); margin-top: 25px;">
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">🎓</span>
+                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; margin: 0; color: white;">AI TRAINING & COURSES</h3>
+                        </td>
+                    </tr>
+                </table>
                 
-                <div class="article-body">
-                    <span class="article-badge badge-orange">YOUTUBE</span>
-                    <h4 class="article-title">{{ training.title }}</h4>
-                    <p class="article-text">{{ training.summary }}</p>
-                    <div class="article-meta">
-                        <span class="meta-date">Oct 16, 2025</span>
-                        <a href="{{ training.url }}" class="meta-link">Watch now →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,43,91,0.06); border: 2px solid #F3F4F6; margin-top: 15px;">
+                    {% if training.video_id %}
+                    <tr>
+                        <td style="padding: 0;">
+                            <a href="https://www.youtube.com/watch?v={{ training.video_id }}" target="_blank" style="display: block; text-decoration: none;">
+                                <img src="https://i.ytimg.com/vi/{{ training.video_id }}/maxresdefault.jpg" alt="{{ training.title }}" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 15px 0;">
+                            <a href="https://www.youtube.com/watch?v={{ training.video_id }}" target="_blank" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 700; color: #F97316; text-decoration: none;">▶ Click to Watch on YouTube</a>
+                        </td>
+                    </tr>
+                    {% elif training.image %}
+                    <tr>
+                        <td style="width: 100%; height: 350px; overflow: hidden; background: #F3F4F6;">
+                            <img src="{{ training.image }}" alt="{{ training.title }}" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td style="padding: 28px;">
+                            <span style="display: inline-block; color: white; font-family: 'Lato', Arial, sans-serif; font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 6px 14px; border-radius: 50px; margin-bottom: 15px; letter-spacing: 1px; background: #F97316;">YOUTUBE</span>
+                            <h4 style="font-family: 'Lato', Arial, sans-serif; font-size: 22px; font-weight: 900; color: #111827; margin: 0 0 15px 0; line-height: 1.3;">{{ training.title }}</h4>
+                            <p style="font-size: 15px; color: #4B5563; line-height: 1.6; margin: 0 0 18px 0;">{{ training.summary }}</p>
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="border-top: 2px solid #F3F4F6;">
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span style="font-family: 'Lato', Arial, sans-serif; font-size: 13px; font-weight: 700; color: #9CA3AF;">{{ training.published_date }}</span>
+                                    </td>
+                                    <td style="width: 50%; text-align: right;">
+                                        <a href="{{ training.url }}" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 900; color: #F97316; text-decoration: none;">Watch now →</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
         {% endif %}
-
+        
         <!-- BREAKTHROUGH RESEARCH -->
         {% if research %}
-        <div class="section-header header-green">
-            <span class="header-icon">🔬</span>
-            <h3 class="header-title">BREAKTHROUGH RESEARCH</h3>
-        </div>
-
-        <div class="content-section">
-            <div class="article-card">
-                {% if research.video_id %}
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/{{ research.video_id }}" frameborder="0" allowfullscreen class="video-embed"></iframe>
-                </div>
-                {% elif research.image %}
-                <div class="article-image-wrapper">
-                    <img src="{{ research.image }}" alt="{{ research.title }}" class="article-image">
-                </div>
-                {% endif %}
+        <tr>
+            <td style="padding: 0 40px 30px 40px;">
+                <table width="100%" cellpadding="16" cellspacing="0" border="0" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); margin-top: 25px;">
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">🔬</span>
+                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; margin: 0; color: white;">BREAKTHROUGH RESEARCH</h3>
+                        </td>
+                    </tr>
+                </table>
                 
-                <div class="article-body">
-                    <span class="article-badge badge-orange">YOUTUBE</span>
-                    <h4 class="article-title">{{ research.title }}</h4>
-                    <p class="article-text">{{ research.summary }}</p>
-                    <div class="article-meta">
-                        <span class="meta-date">Oct 16, 2025</span>
-                        <a href="{{ research.url }}" class="meta-link">Watch now →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,43,91,0.06); border: 2px solid #F3F4F6; margin-top: 15px;">
+                    {% if research.video_id %}
+                    <tr>
+                        <td style="padding: 0;">
+                            <a href="https://www.youtube.com/watch?v={{ research.video_id }}" target="_blank" style="display: block; text-decoration: none;">
+                                <img src="https://i.ytimg.com/vi/{{ research.video_id }}/maxresdefault.jpg" alt="{{ research.title }}" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 15px 0;">
+                            <a href="https://www.youtube.com/watch?v={{ research.video_id }}" target="_blank" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 700; color: #F97316; text-decoration: none;">▶ Click to Watch on YouTube</a>
+                        </td>
+                    </tr>
+                    {% elif research.image %}
+                    <tr>
+                        <td style="width: 100%; height: 350px; overflow: hidden; background: #F3F4F6;">
+                            <img src="{{ research.image }}" alt="{{ research.title }}" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td style="padding: 28px;">
+                            <span style="display: inline-block; color: white; font-family: 'Lato', Arial, sans-serif; font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 6px 14px; border-radius: 50px; margin-bottom: 15px; letter-spacing: 1px; background: #F97316;">YOUTUBE</span>
+                            <h4 style="font-family: 'Lato', Arial, sans-serif; font-size: 22px; font-weight: 900; color: #111827; margin: 0 0 15px 0; line-height: 1.3;">{{ research.title }}</h4>
+                            <p style="font-size: 15px; color: #4B5563; line-height: 1.6; margin: 0 0 18px 0;">{{ research.summary }}</p>
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="border-top: 2px solid #F3F4F6;">
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span style="font-family: 'Lato', Arial, sans-serif; font-size: 13px; font-weight: 700; color: #9CA3AF;">{{ research.published_date }}</span>
+                                    </td>
+                                    <td style="width: 50%; text-align: right;">
+                                        <a href="{{ research.url }}" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 900; color: #F97316; text-decoration: none;">Watch now →</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
         {% endif %}
-
-        <!-- INNOVATIVE STARTUPS -->
+        
+        <!-- INNOVATIVE AI STARTUPS -->
         {% if startup %}
-        <div class="section-header header-purple">
-            <span class="header-icon">💡</span>
-            <h3 class="header-title">INNOVATIVE AI STARTUPS</h3>
-        </div>
-
-        <div class="content-section">
-            <div class="article-card">
-                {% if startup.image %}
-                <div class="article-image-wrapper">
-                    <img src="{{ startup.image }}" alt="{{ startup.title }}" class="article-image">
-                </div>
-                {% endif %}
+        <tr>
+            <td style="padding: 0 40px 30px 40px;">
+                <table width="100%" cellpadding="16" cellspacing="0" border="0" style="background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%); margin-top: 25px;">
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">💡</span>
+                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; margin: 0; color: white;">INNOVATIVE AI STARTUPS</h3>
+                        </td>
+                    </tr>
+                </table>
                 
-                <div class="article-body">
-                    <span class="article-badge badge-purple">STARTUPBLINK</span>
-                    <h4 class="article-title">{{ startup.title }}</h4>
-                    <p class="article-text">{{ startup.summary }}</p>
-                    <div class="article-meta">
-                        <span class="meta-date">Oct 16, 2025</span>
-                        <a href="{{ startup.url }}" class="meta-link">Read more →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,43,91,0.06); border: 2px solid #F3F4F6; margin-top: 15px;">
+                    {% if startup.image %}
+                    <tr>
+                        <td style="width: 100%; height: 350px; overflow: hidden; background: #F3F4F6;">
+                            <img src="{{ startup.image }}" alt="{{ startup.title }}" style="width: 100%; height: 350px; object-fit: cover; display: block;">
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td style="padding: 28px;">
+                            <span style="display: inline-block; color: white; font-family: 'Lato', Arial, sans-serif; font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 6px 14px; border-radius: 50px; margin-bottom: 15px; letter-spacing: 1px; background: #7C3AED;">{{ startup.source }}</span>
+                            <h4 style="font-family: 'Lato', Arial, sans-serif; font-size: 22px; font-weight: 900; color: #111827; margin: 0 0 15px 0; line-height: 1.3;">{{ startup.title }}</h4>
+                            <p style="font-size: 15px; color: #4B5563; line-height: 1.6; margin: 0 0 18px 0;">{{ startup.summary }}</p>
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="border-top: 2px solid #F3F4F6;">
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span style="font-family: 'Lato', Arial, sans-serif; font-size: 13px; font-weight: 700; color: #9CA3AF;">{{ startup.published_date }}</span>
+                                    </td>
+                                    <td style="width: 50%; text-align: right;">
+                                        <a href="{{ startup.url }}" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 900; color: #F97316; text-decoration: none;">Read more →</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
         {% endif %}
+        
+        <!-- TRENDING GENAI TOOLS -->
+        {% if tools and tools|length > 0 %}
+        <tr>
+            <td style="padding: 0 40px 30px 40px;">
+                <table width="100%" cellpadding="16" cellspacing="0" border="0" style="background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); margin-top: 25px;">
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">🛠️</span>
+                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; margin: 0; color: white;">TRENDING GENAI TOOLS</h3>
+                        </td>
+                    </tr>
+                </table>
+                
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 20px;">
+                    <tr>
+                        <td>
+                            {% for tool in tools %}
+                            <table width="100%" cellpadding="25" cellspacing="0" border="0" style="background: white; border: 2px solid #F3F4F6; border-radius: 12px; margin-bottom: 20px;">
+                                <tr>
+                                    <td>
+                                        <h5 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; font-weight: 900; color: #002B5B; margin: 0 0 12px 0;">{{ tool.name }}</h5>
+                                        <p style="font-size: 14px; color: #4B5563; line-height: 1.6; margin: 0 0 15px 0;">{{ tool.description }}</p>
+                                        <a href="{{ tool.link }}" style="font-family: 'Lato', Arial, sans-serif; font-size: 14px; font-weight: 900; color: #F97316; text-decoration: none;">Explore →</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        {% endif %}
+        
+        <!-- =============================================== -->
+        <!-- FEEDBACK SECTION (Clickable Stars) -->
+        <!-- =============================================== -->
+        <tr>
+            <td style="background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%); padding: 50px 20px; text-align: center; border-top: 4px solid #F97316;">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <!-- Icon -->
+                            <p style="font-size: 50px; margin: 0 0 15px 0;">💬</p>
+                            
+                            <!-- Heading -->
+                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 900; color: #002B5B; margin: 0 0 10px 0;">
+                                Rate This Newsletter
+                            </h3>
+                            
+                            <!-- Subtitle -->
+                            <p style="font-size: 16px; color: #4B5563; margin: 0 0 30px 0; line-height: 1.5;">
+                                Your feedback helps us deliver better content!
+                            </p>
+                            
+                            <!-- CLICKABLE STARS -->
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="text-align: center; padding: 15px 0;">
+                                        <!-- 5 Stars -->
+                                        <a href="{{ feedback_url }}&rating=5" style="text-decoration: none; display: inline-block; margin: 0 8px;">
+                                            <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
+                                        </a>
+                                        
+                                        <!-- 4 Stars -->
+                                        <a href="{{ feedback_url }}&rating=4" style="text-decoration: none; display: inline-block; margin: 0 8px;">
+                                            <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
+                                        </a>
+                                        
+                                        <!-- 3 Stars -->
+                                        <a href="{{ feedback_url }}&rating=3" style="text-decoration: none; display: inline-block; margin: 0 8px;">
+                                            <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
+                                        </a>
+                                        
+                                        <!-- 2 Stars -->
+                                        <a href="{{ feedback_url }}&rating=2" style="text-decoration: none; display: inline-block; margin: 0 8px;">
+                                            <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
+                                        </a>
+                                        
+                                        <!-- 1 Star -->
+                                        <a href="{{ feedback_url }}&rating=1" style="text-decoration: none; display: inline-block; margin: 0 8px;">
+                                            <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; padding-top: 20px;">
+                                        <p style="font-size: 14px; color: #6B7280; margin: 0; font-weight: 600; letter-spacing: 0.5px;">
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
 
-        <!-- FEEDBACK -->
-        <div class="feedback-section">
-            <div class="feedback-icon">💬</div>
-            <h3 class="feedback-title">We Value Your Feedback</h3>
-            <p class="feedback-subtitle">How would you rate today's newsletter?</p>
-            <div class="star-rating">
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-            </div>
-            <p class="feedback-label">CLICK TO RATE</p>
-        </div>
-
+        
         <!-- FOOTER -->
-        <div class="vbit-footer">
-            <h4 class="footer-title">VBIT CSE(AI&ML) Newsletter</h4>
-            <p class="footer-text">Delivered weekly every Friday at 4 PM IST</p>
-            <p class="footer-text">Vignana Bharathi Institute of Technology</p>
-            <p class="footer-text">Department of Computer Science & Engineering (AI & ML)</p>
-            <div class="footer-links">
-                <a href="#">Unsubscribe</a>
-                <span>|</span>
-                <a href="#">Preferences</a>
-                <span>|</span>
-                <a href="#">Archive</a>
-            </div>
-            <p class="footer-copyright">© {{ year }} VBIT - All rights reserved</p>
-        </div>
-
-    </div>
+        <tr>
+            <td style="background: linear-gradient(135deg, #002B5B 0%, #004080 100%); color: white; padding: 35px 40px; text-align: center;">
+                <h4 style="font-family: 'Lato', Arial, sans-serif; font-size: 20px; font-weight: 900; margin: 0 0 10px 0;">VBIT CSE(AI&ML) Newsletter</h4>
+                <p style="font-size: 14px; margin: 0 0 6px 0; font-weight: 500;">Delivered weekly every Friday at 4 PM IST</p>
+                <p style="font-size: 14px; margin: 0 0 6px 0; font-weight: 500;">Vignana Bharathi Institute of Technology</p>
+                <p style="font-size: 14px; margin: 0 0 20px 0; font-weight: 500;">Department of Computer Science & Engineering (AI & ML)</p>
+                <table width="100%" cellpadding="18" cellspacing="0" border="0" style="border-top: 2px solid rgba(255,255,255,0.2); border-bottom: 2px solid rgba(255,255,255,0.2); margin: 20px 0;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <a href="{{ unsubscribe_url }}" style="color: #F97316; text-decoration: none; font-family: 'Lato', Arial, sans-serif; font-weight: 700; font-size: 13px; margin: 0 10px;">Unsubscribe</a>
+                            <span style="color: rgba(255,255,255,0.5); margin: 0 5px;">|</span>
+                            <a href="{{ preferences_url }}" style="color: #F97316; text-decoration: none; font-family: 'Lato', Arial, sans-serif; font-weight: 700; font-size: 13px; margin: 0 10px;">Preferences</a>
+                            <span style="color: rgba(255,255,255,0.5); margin: 0 5px;">|</span>
+                            <a href="{{ archive_url }}" style="color: #F97316; text-decoration: none; font-family: 'Lato', Arial, sans-serif; font-weight: 700; font-size: 13px; margin: 0 10px;">Archive</a>
+                        </td>
+                    </tr>
+                </table>
+                <p style="font-size: 13px; margin: 12px 0 0 0;">© {{ year }} VBIT - All rights reserved</p>
+            </td>
+        </tr>
+        
+    </table>
+    
 </body>
 </html>

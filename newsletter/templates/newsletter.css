@@ -328,6 +328,65 @@ body {
     text-decoration: underline;
 }
 
+/* ========== TRENDING GENAI TOOLS GRID ========== */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.tool-card {
+    background: white;
+    border: 2px solid var(--cool-gray);
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover {
+    border-color: var(--bright-orange);
+    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.15);
+    transform: translateY(-3px);
+}
+
+.tool-name {
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--navy-blue);
+    margin-bottom: 12px;
+}
+
+.tool-description {
+    font-size: 14px;
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.tool-link {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--bright-orange);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.tool-link:hover {
+    color: var(--navy-blue);
+    text-decoration: underline;
+}
+
+/* Responsive tools grid */
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 /* ========== FEEDBACK WITH INTERACTIVE STARS ========== */
 .feedback-section {
     background: linear-gradient(135deg, var(--cool-gray) 0%, #E5E7EB 100%);

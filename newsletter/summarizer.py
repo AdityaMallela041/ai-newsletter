@@ -1,4 +1,5 @@
 # newsletter/summarizer.py
+
 import os
 import requests
 from dotenv import load_dotenv
@@ -9,81 +10,90 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 def summarize_with_groq(text: str, category: str = "story") -> str | None:
     """
-    ENHANCED: Consistent summaries with better prompts and token limits
+    ENHANCED: Summaries focused on GenAI, LLMs, Agents, and Deep Learning
     """
     if not GROQ_API_KEY:
         return f"{text[:150]}..."
-
-    # ENHANCED: More specific prompts with consistent length
+    
+    # UPDATED: Category-specific prompts for GenAI/LLM content
     prompts = {
-        "featured": {
+        "development": {
             "prompt": (
-                "You are a tech newsletter writer. Summarize this AI breakthrough in exactly 4-5 sentences. "
-                "Structure: (1) What happened, (2) Why it matters, (3) Technical details, (4) Impact/implications. "
-                "Be clear, engaging, and informative. Return ONLY the summary:\n\n"
+                "You are a GenAI & LLM expert newsletter writer. Summarize this breakthrough in exactly 4-5 sentences. "
+                "Focus on: (1) What's new in LLMs/GenAI/Agents, (2) Technical innovation, "
+                "(3) Why it matters for AI development, (4) Real-world implications. "
+                "Use terms like 'transformer', 'RAG', 'multimodal', 'fine-tuning' when relevant. "
+                "Be technical yet accessible. Return ONLY the summary:\n\n"
             ),
             "tokens": 200
         },
-        "story": {
-            "prompt": (
-                "Summarize this AI news in exactly 3-4 sentences. "
-                "Focus on: what happened, why it's significant, and key takeaways. "
-                "Be concise and factual. Return ONLY the summary:\n\n"
-            ),
-            "tokens": 180
-        },
         "training": {
             "prompt": (
-                "Summarize this AI training resource in exactly 2-3 sentences. "
-                "Cover: what it teaches, who it's for, and key learning outcomes. "
-                "Return ONLY the summary:\n\n"
+                "Summarize this LLM/GenAI training resource in exactly 3-4 sentences. "
+                "Cover: (1) What it teaches (LLM training, fine-tuning, agents, etc.), "
+                "(2) Target audience (developers/researchers/students), (3) Key learning outcomes. "
+                "Focus on practical skills for building with LLMs. Return ONLY the summary:\n\n"
             ),
-            "tokens": 140
+            "tokens": 160
         },
         "research": {
             "prompt": (
-                "Summarize this AI research in exactly 3-4 sentences. "
-                "Include: research question, methodology, key findings, and significance. "
-                "Use accessible language. Return ONLY the summary:\n\n"
+                "Summarize this LLM/GenAI research paper in exactly 3-4 sentences. "
+                "Include: (1) Research question (transformers, reasoning, agents, etc.), "
+                "(2) Novel methodology or architecture, (3) Key findings and benchmarks, "
+                "(4) Significance for the field. Use technical language. Return ONLY the summary:\n\n"
             ),
             "tokens": 180
         },
-        "tool": {
-            "prompt": (
-                "Describe this AI tool in exactly 2-3 sentences. "
-                "Explain: what it does, key features, and primary use case. "
-                "Return ONLY the description:\n\n"
-            ),
-            "tokens": 140
-        },
         "startup": {
             "prompt": (
-                "Summarize this AI startup in exactly 2-3 sentences. "
-                "Cover: what they build, unique value proposition, and target market. "
-                "Return ONLY the summary:\n\n"
+                "Summarize this GenAI/LLM startup or tool in exactly 3-4 sentences. "
+                "Cover: (1) What they're building (LLM platform, agent framework, vector DB, etc.), "
+                "(2) Unique technology or approach, (3) Use cases and target market. "
+                "Emphasize innovation in the GenAI space. Return ONLY the summary:\n\n"
             ),
-            "tokens": 140
+            "tokens": 160
+        },
+        "tool": {
+            "prompt": (
+                "Describe this GenAI/LLM tool in exactly 2-3 sentences. "
+                "Explain: (1) What it does (LangChain, vector DB, agent framework, etc.), "
+                "(2) Key features for LLM developers, (3) Primary use case. "
+                "Be concise and technical. Return ONLY the description:\n\n"
+            ),
+            "tokens": 120
+        },
+        "featured": {
+            "prompt": (
+                "You are a GenAI expert. Summarize this AI breakthrough in exactly 4-5 sentences. "
+                "Structure: (1) What happened, (2) Why it matters for LLMs/GenAI, "
+                "(3) Technical details, (4) Impact on the field. "
+                "Be clear, engaging, and informative. Return ONLY the summary:\n\n"
+            ),
+            "tokens": 200
         }
     }
     
-    config = prompts.get(category, prompts["story"])
+    # Use category-specific prompt or default to 'development'
+    config = prompts.get(category, prompts["development"])
     prompt = config["prompt"] + text
     max_tokens = config["tokens"]
-
+    
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json",
     }
-
+    
     payload = {
         "model": "llama-3.1-8b-instant",
         "messages": [
             {
-                "role": "system", 
+                "role": "system",
                 "content": (
-                    "You are an expert tech newsletter writer. "
-                    "Write clear, engaging summaries that are informative yet accessible. "
+                    "You are an expert in Generative AI, Large Language Models, AI Agents, and Deep Learning. "
+                    "Write clear, technically accurate summaries for an audience of AI/ML students and developers. "
+                    "Use proper terminology (transformers, embeddings, RAG, fine-tuning, RLHF, chain-of-thought, etc.). "
                     "Be concise and stick to the requested length exactly."
                 )
             },
@@ -93,7 +103,7 @@ def summarize_with_groq(text: str, category: str = "story") -> str | None:
         "max_tokens": max_tokens,
         "stream": False,
     }
-
+    
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=20)
         response.raise_for_status()
@@ -103,7 +113,7 @@ def summarize_with_groq(text: str, category: str = "story") -> str | None:
         bad_prefixes = [
             "here is", "here's", "summary:", "in summary",
             "this article", "the article", "according to",
-            "the research", "researchers"
+            "the research", "researchers", "the text", "this text"
         ]
         
         summary_lower = summary.lower()
@@ -115,10 +125,35 @@ def summarize_with_groq(text: str, category: str = "story") -> str | None:
                 break
         
         return summary
-        
+    
     except requests.Timeout:
         print(f"⏱️ Groq timeout for {category}")
         return None
+    
     except Exception as e:
         print(f"❌ Groq error for {category}: {e}")
         return None
+
+
+def summarize_articles(articles_data):
+    """
+    Summarize articles with category-appropriate prompts
+    """
+    if not articles_data:
+        return articles_data
+    
+    # Process single articles (not lists)
+    for category in ["development", "training", "research", "startup"]:
+        article = articles_data.get(category)
+        if article and isinstance(article, dict):
+            content = article.get("content", "")
+            if content:
+                print(f"📝 Summarizing {category}...")
+                summary = summarize_with_groq(content, category=category)
+                if summary:
+                    article["summary"] = summary
+                else:
+                    # Fallback to truncated content
+                    article["summary"] = content[:180] + "..."
+    
+    return articles_data
