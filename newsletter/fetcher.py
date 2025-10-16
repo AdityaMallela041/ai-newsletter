@@ -5,6 +5,7 @@ import requests
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -71,7 +72,6 @@ def fetch_articles():
         max_results=5
     )
     
-    
     def extract_source_name(url_val):
         """Extract clean source name from URL"""
         if not url_val:
@@ -83,24 +83,47 @@ def fetch_articles():
         except:
             return "GENAI NEWS"
     
-    
     def extract_video_id(url_val):
-        """Extract YouTube video ID if present"""
-        if not url_val or "youtube.com" not in url_val and "youtu.be" not in url_val:
+        """ENHANCED: Extract YouTube video ID from ALL URL formats"""
+        if not url_val:
             return None
         
-        try:
-            if "youtu.be" in url_val:
-                return url_val.split("/")[-1].split("?")[0]
+        # Comprehensive YouTube URL patterns
+        patterns = [
+            # Standard: https://www.youtube.com/watch?v=VIDEO_ID
+            r'(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})',
             
-            parsed = urlparse(url_val)
-            if "youtube.com" in parsed.netloc:
-                return parse_qs(parsed.query).get("v", [None])[0]
-        except:
-            return None
+            # Short: https://youtu.be/VIDEO_ID
+            r'(?:youtu\.be\/)([a-zA-Z0-9_-]{11})',
+            
+            # Embed: https://www.youtube.com/embed/VIDEO_ID
+            r'(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})',
+            
+            # Shorts: https://www.youtube.com/shorts/VIDEO_ID
+            r'(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})',
+            
+            # Mobile: https://m.youtube.com/watch?v=VIDEO_ID
+            r'(?:m\.youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})',
+            
+            # Live: https://www.youtube.com/live/VIDEO_ID
+            r'(?:youtube\.com\/live\/)([a-zA-Z0-9_-]{11})',
+            
+            # Video with timestamp: ?v=VIDEO_ID&t=123s
+            r'[?&]v=([a-zA-Z0-9_-]{11})',
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, url_val)
+            if match:
+                video_id = match.group(1)
+                print(f"   🎥 Extracted YouTube ID: {video_id}")
+                return video_id
+        
+        # Check if URL contains youtube/youtu keywords but no match
+        if 'youtube' in url_val.lower() or 'youtu.be' in url_val.lower():
+            print(f"   ⚠️ YouTube URL detected but couldn't extract ID: {url_val}")
         
         return None
-    
     
     def get_high_quality_image(res, image_pool, article_type, index=0):
         """Get UNIQUE image per article"""
@@ -126,44 +149,78 @@ def fetch_articles():
         keyword = keywords.get(article_type, "technology")
         return f"https://source.unsplash.com/800x450/?{keyword}&sig={abs(seed)}"
     
-    
     def is_quality_content(res, category):
-        """Filter for CURATED, HIGH-QUALITY content"""
+        """ENHANCED: Filter for HIGH-QUALITY, TECHNICAL content"""
         title = (res.get("title") or "").lower()
         content = (res.get("content") or res.get("snippet") or "").lower()
         full_text = title + " " + content
         
-        if len(content.split()) < 20:
+        # INCREASED: Minimum 50 words for technical depth
+        word_count = len(content.split())
+        if word_count < 50:
+            print(f"   ❌ Rejected: Too short ({word_count} words)")
             return False
         
+        # Category-specific quality keywords (expanded lists)
         quality_keywords = {
             "development": [
                 "gpt", "llm", "large language model", "generative ai", "genai",
                 "claude", "gemini", "agent", "autonomous", "multimodal",
-                "rag", "vector", "embedding", "chatbot", "ai assistant"
+                "rag", "vector", "embedding", "chatbot", "ai assistant",
+                "transformer", "attention", "fine-tuning", "prompt engineering",
+                "api", "model", "training", "inference", "deployment"
             ],
             "training": [
                 "tutorial", "course", "learn", "training", "guide",
                 "llm", "transformer", "fine-tuning", "rlhf", "prompt engineering",
-                "langchain", "agent", "deep learning", "neural network"
+                "langchain", "agent", "deep learning", "neural network",
+                "pytorch", "tensorflow", "hugging face", "practical", "hands-on",
+                "build", "implement", "code", "project"
             ],
             "research": [
                 "arxiv", "paper", "research", "study", "neural", "transformer",
                 "attention mechanism", "llm", "language model", "benchmark",
-                "deep learning", "reasoning", "agent", "multi-agent"
+                "deep learning", "reasoning", "agent", "multi-agent",
+                "novel", "algorithm", "architecture", "experiment", "result",
+                "performance", "accuracy", "dataset"
             ],
             "startup": [
                 "startup", "founded", "launch", "platform", "api", "tool",
                 "llm", "genai", "agent", "vector database", "ai platform",
-                "openai", "anthropic", "cohere", "framework", "company"
+                "openai", "anthropic", "cohere", "framework", "company",
+                "funding", "product", "service", "enterprise", "solution"
             ]
         }
         
         keywords = quality_keywords.get(category, [])
         matches = sum(1 for keyword in keywords if keyword in full_text)
         
-        return matches >= 2
-    
+        # INCREASED: Require 3+ keyword matches for better relevance
+        if matches < 3:
+            print(f"   ❌ Rejected: Low relevance ({matches} keyword matches)")
+            return False
+        
+        # BONUS: Penalize promotional/spam content
+        spam_indicators = [
+            "click here", "buy now", "limited offer", "sign up today",
+            "exclusive deal", "download now", "free trial", "subscribe"
+        ]
+        spam_count = sum(1 for spam in spam_indicators if spam in full_text)
+        
+        if spam_count >= 2:
+            print(f"   ❌ Rejected: Too promotional ({spam_count} spam indicators)")
+            return False
+        
+        # BONUS: Prefer content with technical depth indicators
+        depth_indicators = [
+            "implementation", "architecture", "algorithm", "framework",
+            "methodology", "approach", "technique", "system", "design",
+            "evaluation", "analysis", "experiment", "benchmark"
+        ]
+        depth_score = sum(1 for indicator in depth_indicators if indicator in full_text)
+        
+        print(f"   ✅ Quality: {word_count} words, {matches} keywords, {depth_score} depth indicators")
+        return True
     
     def format_article(res, article_type, image_pool=[], index=0):
         """Format article with comprehensive metadata"""
@@ -203,7 +260,6 @@ def fetch_articles():
             "category": article_type
         }
     
-    
     def get_best_article(results, images, category):
         """Pick BEST, MOST RELEVANT article"""
         if not results:
@@ -218,12 +274,12 @@ def fetch_articles():
         if not quality_results:
             return None
         
+        # Prioritize video content
         video_articles = [(a, s) for a, s in quality_results if a.get("video_id")]
         if video_articles:
             return max(video_articles, key=lambda x: x[1])[0]
         
         return max(quality_results, key=lambda x: x[1])[0]
-    
     
     development = get_best_article(developments_results, dev_images, "development")
     training = get_best_article(training_results, train_images, "training")
@@ -286,7 +342,6 @@ def fetch_trending_genai_tools():
     # Try to fetch from API, but use curated list as fallback
     url = "https://api.tavily.com/search"
     headers = {"Content-Type": "application/json"}
-    
     payload = {
         "api_key": os.getenv("TAVILY_API_KEY"),
         "query": "LangChain Pinecone vector database LlamaIndex AI agent frameworks 2025",
@@ -308,7 +363,7 @@ def fetch_trending_genai_tools():
         seen_names = set()
         
         # Known GenAI tools for matching
-        known_tools = ["langchain", "pinecone", "autogpt", "llamaindex", "weaviate", 
+        known_tools = ["langchain", "pinecone", "autogpt", "llamaindex", "weaviate",
                       "chroma", "milvus", "qdrant", "haystack", "semantic kernel"]
         
         for res in results:
@@ -349,7 +404,7 @@ def fetch_trending_genai_tools():
             return curated_tools
         
         return tools_list
-    
+        
     except Exception as e:
         print(f"❌ Error fetching tools, using curated list: {e}")
         return curated_tools
