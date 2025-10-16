@@ -1,144 +1,206 @@
 # newsletter/pipeline.py
+
 import os
+import shutil
 from datetime import datetime
+from jinja2 import Environment, FileSystemLoader
 from newsletter.fetcher import fetch_articles
 from newsletter.summarizer import summarize_with_groq
-from newsletter.database import init_db, save_newsletter, log_newsletter_sent
-from newsletter.templates import render_newsletter
 from newsletter.emailer import send_email
+from newsletter.database import save_newsletter
 
-OUTPUT_DIR = "newsletter/output"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-def run_pipeline():
-    """SIMPLIFIED: Pipeline for 1 article per category"""
-    print("=" * 80)
-    print("🚀 CSE(AI&ML) Newsletter Pipeline - FINAL v3.0")
-    print("=" * 80)
-    
+def convert_image_to_base64(image_path):
+    """Convert local image to base64 for email embedding"""
+    import base64
     try:
-        # Step 1: Database
-        print("\n[1/7] Initializing PostgreSQL...")
-        init_db()
-        
-        # Step 2: Fetch (1 per category + tools)
-        print("\n[2/7] Fetching content...")
-        data = fetch_articles()
-        
-        development = data.get("development")
-        training = data.get("training")
-        research = data.get("research")
-        startup = data.get("startup")
-        trending_tools = data.get("trending_tools", [])
-        
-        # DEBUG: Print tools
-        print(f"\n🔧 DEBUG - Trending Tools: {len(trending_tools)}")
-        for tool in trending_tools:
-            print(f"   - {tool.get('name', 'Unknown')}")
-        
-        total = data.get("total_articles", 0)
-        if total == 0:
-            print("❌ No content fetched. Aborting.")
-            return
-        
-        # Step 3: Summarize
-        print(f"\n[3/7] Generating summaries for {total} articles...")
-        
-        if development and development.get("content"):
-            summary = summarize_with_groq(development["content"], "story")
-            if summary:
-                development["summary"] = summary
-                print(f"   ✅ Development: {development['title'][:50]}...")
-        
-        if training and training.get("content"):
-            summary = summarize_with_groq(training["content"], "training")
-            if summary:
-                training["summary"] = summary
-                print(f"   ✅ Training: {training['title'][:50]}...")
-        
-        if research and research.get("content"):
-            summary = summarize_with_groq(research["content"], "research")
-            if summary:
-                research["summary"] = summary
-                print(f"   ✅ Research: {research['title'][:50]}...")
-        
-        if startup and startup.get("content"):
-            summary = summarize_with_groq(startup["content"], "startup")
-            if summary:
-                startup["summary"] = summary
-                print(f"   ✅ Startup: {startup['title'][:50]}...")
-        
-        # Step 4: Prepare data
-        print("\n[4/7] Preparing newsletter...")
-        
-        newsletter_data = {
-            "development": development,
-            "training": training,
-            "research": research,
-            "startup": startup,
-            "trending_tools": trending_tools,  # PASS TOOLS
-            "total_articles": total,
-            "video_count": data.get("video_count", 0),
-            "recipient_name": os.getenv("RECIPIENT_NAME", "Student"),
-            "feedback_url": os.getenv("FEEDBACK_URL", "#"),
-            "unsubscribe_url": os.getenv("UNSUBSCRIBE_URL", "#"),
-            "preferences_url": os.getenv("PREFERENCES_URL", "#"),
-            "archive_url": os.getenv("ARCHIVE_URL", "#"),
-        }
-        
-        # Step 5: Render
-        print("\n[5/7] Rendering HTML...")
-        newsletter_html = render_newsletter(newsletter_data)
-        
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        output_path = os.path.join(OUTPUT_DIR, f"newsletter_{timestamp}.html")
-        
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write(newsletter_html)
-        print(f"   ✅ Saved: {output_path}")
-        
-        # Step 6: Save to database
-        print("\n[6/7] Saving to database...")
-        subject = f"🤖 CSE(AI&ML) Weekly Newsletter - {datetime.now().strftime('%B %d, %Y')}"
-        sender_email = os.getenv("SENDER_EMAIL", "newsletter@vbit.ac.in")
-        
-        newsletter_id = save_newsletter(
-            title=subject,
-            content_html=newsletter_html,
-            created_by_email=sender_email,
-            total_articles=total
-        )
-        
-        # Step 7: Email
-        print("\n[7/7] Email delivery...")
-        send_enabled = os.getenv("SEND_EMAIL", "false").lower() == "true"
-        recipients = os.getenv("RECIPIENT_EMAILS", "").split(",")
-        recipients = [e.strip() for e in recipients if e.strip()]
-        
-        if send_enabled and recipients:
-            send_email(newsletter_html, subject, recipients)
-            if newsletter_id:
-                log_newsletter_sent(newsletter_id, recipients, "success")
-        else:
-            print(f"   ⚠️ Email DISABLED (testing mode)")
-            print(f"   📬 Would send to: {len(recipients)} recipient(s)")
-        
-        # Summary
-        print("\n" + "=" * 80)
-        print("✅ NEWSLETTER COMPLETED!")
-        print("=" * 80)
-        print(f"\n📊 Statistics:")
-        print(f"   Total Articles: {total}")
-        print(f"   Videos: {data.get('video_count', 0)}")
-        print(f"   Trending Tools: {len(trending_tools)}")
-        print(f"   Newsletter ID: #{newsletter_id}")
-        print(f"   Output: {output_path.split(os.sep)[-1]}")
-        print("=" * 80)
-        
+        with open(image_path, 'rb') as img_file:
+            encoded = base64.b64encode(img_file.read()).decode('utf-8')
+            return f"data:image/jpeg;base64,{encoded}"
     except Exception as e:
-        print(f"\n❌ ERROR: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"⚠️  Error converting image: {e}")
+        return None
 
-if __name__ == "__main__":
-    run_pipeline()
+
+def embed_local_images(html_content):
+    """Convert local image paths to base64 for email compatibility"""
+    project_root = os.path.dirname(os.path.dirname(__file__))
+    assets_path = os.path.join(project_root, 'newsletter', 'assets', 'vbit_logo.jpg')
+    
+    if os.path.exists(assets_path):
+        base64_img = convert_image_to_base64(assets_path)
+        if base64_img:
+            html_content = html_content.replace('../assets/vbit_logo.jpg', base64_img)
+            html_content = html_content.replace('assets/vbit_logo.jpg', base64_img)
+    
+    return html_content
+
+
+def read_css_file():
+    """Read CSS file content"""
+    css_path = os.path.join(os.path.dirname(__file__), 'templates', 'newsletter.css')
+    try:
+        with open(css_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        print(f"⚠️  Warning: CSS file not found at {css_path}")
+        return ""
+
+
+def generate_newsletter():
+    """Main pipeline to generate newsletter"""
+    
+    print("\n" + "="*60)
+    print("🤖 VBIT AI NEWSLETTER GENERATOR - v6.0")
+    print("="*60 + "\n")
+    
+    # Step 1: Fetch content
+    print("📥 Step 1: Fetching latest AI & ML content...")
+    articles = fetch_articles()
+    print(f"✅ Fetched content from categories\n")
+    
+    # Step 2: Summarize each article
+    print("📝 Step 2: Generating summaries with AI...")
+    skip_keys = ['total_articles', 'video_count']
+    
+    for category, article in articles.items():
+        if category in skip_keys or not isinstance(article, dict):
+            continue
+        if isinstance(article, list):
+            continue
+        if article and 'content' in article:
+            print(f"   → Summarizing {category}...")
+            summary = summarize_with_groq(article['content'], category)
+            if summary:
+                article['summary'] = summary
+            else:
+                article['summary'] = article['content'][:200] + "..."
+    
+    print(f"✅ Summaries generated\n")
+    
+    # Step 3: Generate HTML
+    print("🎨 Step 3: Generating VBIT-branded newsletter...")
+    
+    template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template('newsletter.html')
+    
+    template_data = {
+        'newsletter_title': 'AI & ML Weekly Newsletter',
+        'current_date': datetime.now().strftime('%B %d, %Y'),
+        'time_of_day': get_time_of_day(),
+        'recipient_name': 'Student',
+        'development': articles.get('development'),
+        'training': articles.get('training'),
+        'research': articles.get('research'),
+        'trending_tools': articles.get('tools', []),
+        'startup': articles.get('startup'),
+        'feedback_url': 'https://vbit-feedback.example.com',
+        'newsletter_id': datetime.now().strftime('%Y%m%d'),
+        'unsubscribe_url': '#',
+        'preferences_url': '#',
+        'archive_url': '#',
+        'year': datetime.now().year
+    }
+    
+    html_content = template.render(**template_data)
+    
+    # Step 4: Embed logo as base64
+    print("🖼️  Step 4: Embedding logo as base64...")
+    html_with_logo = embed_local_images(html_content)
+    
+    # Step 5: Inline CSS for email
+    print("🔧 Step 5: Inlining CSS for email compatibility...")
+    css_content = read_css_file()
+    
+    # Add CSS to <head>
+    if '<head>' in html_with_logo:
+        final_html = html_with_logo.replace(
+            '</head>',
+            f'<style>\n{css_content}\n</style>\n</head>'
+        )
+    else:
+        final_html = html_with_logo
+    
+    # Remove external CSS link
+    import re
+    final_html = re.sub(r'<link[^>]*rel=["\']stylesheet["\'][^>]*>', '', final_html)
+    
+    # Step 6: Save to output folder
+    print("💾 Step 6: Saving newsletter...")
+    output_dir = os.path.join(os.path.dirname(__file__), 'output')
+    os.makedirs(output_dir, exist_ok=True)
+    
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    output_file = os.path.join(output_dir, f'newsletter_{timestamp}.html')
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(final_html)
+    
+    print(f"✅ Newsletter saved: {output_file}\n")
+    
+    # Step 7: Copy CSS file to output (for development viewing)
+    css_src = os.path.join(template_dir, 'newsletter.css')
+    css_dst = os.path.join(output_dir, 'newsletter.css')
+    if os.path.exists(css_src):
+        shutil.copy2(css_src, css_dst)
+        print(f"✅ CSS copied to output folder\n")
+    
+    # Step 8: Copy assets
+    assets_src = os.path.join(os.path.dirname(__file__), 'assets')
+    assets_dst = os.path.join(output_dir, 'assets')
+    
+    if os.path.exists(assets_src):
+        os.makedirs(assets_dst, exist_ok=True)
+        for file in os.listdir(assets_src):
+            src_file = os.path.join(assets_src, file)
+            dst_file = os.path.join(assets_dst, file)
+            if os.path.isfile(src_file):
+                shutil.copy2(src_file, dst_file)
+        print(f"✅ Assets copied to output folder\n")
+    
+    # Step 9: Save to database
+    print("💾 Step 7: Saving to database...")
+    try:
+        newsletter_id = save_newsletter(
+            title=template_data['newsletter_title'],
+            content_html=final_html,
+            created_by_email='system@vbit.edu',
+            total_articles=articles.get('total_articles', 0)
+        )
+        print(f"✅ Saved to database (ID: {newsletter_id})\n")
+    except Exception as e:
+        print(f"⚠️  Database save skipped: {e}\n")
+    
+    # Step 10: Send email (optional)
+    if os.getenv('SEND_EMAIL', 'false').lower() == 'true':
+        print("📧 Step 8: Sending newsletter via email...")
+        try:
+            send_email(final_html, template_data['newsletter_title'])
+            print("✅ Newsletter sent!\n")
+        except Exception as e:
+            print(f"⚠️  Email sending failed: {e}\n")
+    else:
+        print("ℹ️  Email sending disabled (set SEND_EMAIL=true in .env to enable)\n")
+    
+    print("="*60)
+    print("🎉 NEWSLETTER GENERATION COMPLETE!")
+    print(f"📂 Output: {output_file}")
+    print("="*60 + "\n")
+    
+    return output_file
+
+
+def get_time_of_day():
+    """Get time of day greeting"""
+    hour = datetime.now().hour
+    if hour < 12:
+        return 'morning'
+    elif hour < 17:
+        return 'afternoon'
+    else:
+        return 'evening'
+
+
+if __name__ == '__main__':
+    generate_newsletter()
