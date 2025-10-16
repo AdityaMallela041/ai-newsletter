@@ -88,7 +88,7 @@ def generate_newsletter():
     
     if not articles or articles.get("total_articles", 0) == 0:
         print("❌ No articles fetched. Aborting newsletter generation.")
-        return None
+        return None, None
     
     # Summarize articles
     print("\n🤖 Generating AI summaries...")
@@ -102,7 +102,7 @@ def generate_newsletter():
                 if summary:
                     article["summary"] = summary
                 else:
-                    article["summary"] = content[:180] + "..."
+                    article["summary"] = f"<p>{content[:180]}...</p>"
     
     # Render HTML template
     print("\n📄 Rendering newsletter template...")
@@ -123,17 +123,40 @@ def generate_newsletter():
     else:
         time_of_day = "Evening"
     
+    # Save newsletter to database FIRST to get newsletter_id
+    print("\n💾 Saving to database...")
+    newsletter_id = save_newsletter(
+        title='Weekly AI & ML Insights',
+        content_html="<p>Generating...</p>",  # Temporary content
+        created_by_email="system@vbit.edu"
+    )
+    
+    if newsletter_id:
+        print(f"   ✅ Newsletter ID: {newsletter_id}")
+    else:
+        print("   ⚠️ Could not save to database, using ID 1")
+        newsletter_id = 1
+    
+    # Generate feedback URLs with newsletter_id and recipient_email
+    base_feedback_url = os.getenv('FEEDBACK_API_URL', 'http://localhost:8000/feedback')
+    recipient_email = os.getenv('RECIPIENT_EMAIL', 'test@example.com').split(',')[0].strip()
+    
+    # Create complete feedback URL with parameters
+    feedback_url = f"{base_feedback_url}?newsletter_id={newsletter_id}&email={urllib.parse.quote(recipient_email)}"
+    
     template_data = {
         'newsletter_title': 'Weekly AI & ML Insights',
         'current_date': now.strftime('%B %d, %Y'),
         'time_of_day': time_of_day,
         'year': now.year,
+        'newsletter_id': newsletter_id,
+        'recipient_email': recipient_email,
         'development': articles.get('development'),
         'training': articles.get('training'),
         'research': articles.get('research'),
         'startup': articles.get('startup'),
         'tools': articles.get('tools', []),
-        'feedback_url': os.getenv('FEEDBACK_URL', '#'),
+        'feedback_url': feedback_url,  # Complete feedback URL with parameters
         'unsubscribe_url': os.getenv('UNSUBSCRIBE_URL', '#'),
         'preferences_url': os.getenv('PREFERENCES_URL', '#'),
         'archive_url': os.getenv('ARCHIVE_URL', '#'),
@@ -151,8 +174,11 @@ def generate_newsletter():
     
     # Inline CSS for email compatibility
     print("   🎨 Inlining CSS...")
-    premailer = Premailer(html_content, strip_important=False)
-    html_content = premailer.transform()
+    try:
+        premailer = Premailer(html_content, strip_important=False)
+        html_content = premailer.transform()
+    except Exception as e:
+        print(f"   ⚠️ CSS inlining warning: {e}")
     
     # Save to output directory
     output_dir = os.path.join(project_root, 'newsletter', 'output')
@@ -166,19 +192,22 @@ def generate_newsletter():
     
     print(f"   ✅ Newsletter saved: {output_path}")
     
-    # Save to database (FIXED: using created_by_email instead of created_by)
-    print("\n💾 Saving to database...")
-    newsletter_id = save_newsletter(
-        title=template_data['newsletter_title'],
-        content_html=html_content,
-        created_by_email="system@vbit.edu"  # FIXED: Changed parameter name
-    )
-    
-    if newsletter_id:
-        print(f"   ✅ Newsletter ID: {newsletter_id}")
+    # Update newsletter in database with actual HTML content
+    try:
+        from newsletter.database import SessionLocal, Newsletter
+        session = SessionLocal()
+        newsletter = session.query(Newsletter).filter_by(newsletter_id=newsletter_id).first()
+        if newsletter:
+            newsletter.content_html = html_content
+            session.commit()
+            print(f"   ✅ Database updated with final HTML")
+        session.close()
+    except Exception as e:
+        print(f"   ⚠️ Could not update database: {e}")
     
     print("\n" + "=" * 60)
     print("✅ Newsletter generation complete!")
+    print(f"📧 Feedback URL: {feedback_url}&rating=5")  # Example with 5 stars
     
     return html_content, newsletter_id
 
@@ -189,7 +218,7 @@ def send_newsletter():
     """
     result = generate_newsletter()
     
-    if not result:
+    if not result or result[0] is None:
         print("❌ Failed to generate newsletter")
         return False
     
@@ -209,13 +238,16 @@ def send_newsletter():
     success = send_email(html_content, subject)
     
     if success and newsletter_id:
-        recipient_emails = os.getenv("RECIPIENT_EMAIL", "").split(",")
-        log_newsletter_sent(
-            newsletter_id=newsletter_id,
-            recipient_emails=recipient_emails,
-            status="sent"
-        )
-        print("✅ Newsletter sent successfully!")
+        recipient_emails = [email.strip() for email in os.getenv("RECIPIENT_EMAIL", "").split(",") if email.strip()]
+        try:
+            log_newsletter_sent(
+                newsletter_id=newsletter_id,
+                recipient_emails=recipient_emails,
+                status="sent"
+            )
+            print("✅ Newsletter sent successfully!")
+        except Exception as e:
+            print(f"⚠️ Email sent but logging failed: {e}")
     else:
         print("❌ Failed to send newsletter")
     

@@ -295,27 +295,23 @@
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td style="text-align: center; padding: 15px 0;">
-                                        <!-- 5 Stars -->
-                                        <a href="{{ feedback_url }}&rating=5" style="text-decoration: none; display: inline-block; margin: 0 8px;">
+                                        <!-- Each star links to feedback URL with rating parameter -->
+                                        <a href="{{ feedback_url }}&rating=5" style="text-decoration: none; display: inline-block; margin: 0 8px; transition: transform 0.2s;">
                                             <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
                                         </a>
                                         
-                                        <!-- 4 Stars -->
                                         <a href="{{ feedback_url }}&rating=4" style="text-decoration: none; display: inline-block; margin: 0 8px;">
                                             <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
                                         </a>
                                         
-                                        <!-- 3 Stars -->
                                         <a href="{{ feedback_url }}&rating=3" style="text-decoration: none; display: inline-block; margin: 0 8px;">
                                             <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
                                         </a>
                                         
-                                        <!-- 2 Stars -->
                                         <a href="{{ feedback_url }}&rating=2" style="text-decoration: none; display: inline-block; margin: 0 8px;">
                                             <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
                                         </a>
                                         
-                                        <!-- 1 Star -->
                                         <a href="{{ feedback_url }}&rating=1" style="text-decoration: none; display: inline-block; margin: 0 8px;">
                                             <span style="font-size: 50px; color: #F59E0B; display: inline-block; line-height: 1;">⭐</span>
                                         </a>
@@ -324,6 +320,7 @@
                                 <tr>
                                     <td style="text-align: center; padding-top: 20px;">
                                         <p style="font-size: 14px; color: #6B7280; margin: 0; font-weight: 600; letter-spacing: 0.5px;">
+                                            Click a star to rate (1-5)
                                         </p>
                                     </td>
                                 </tr>
@@ -333,6 +330,7 @@
                 </table>
             </td>
         </tr>
+
         
         <!-- FOOTER -->
         <tr>
